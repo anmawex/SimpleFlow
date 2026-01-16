@@ -1,4 +1,4 @@
-import AppLayout from '@/layout/AppLayout.vue';
+import AppLayout from '@/app/layout/AppLayout.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
@@ -11,7 +11,7 @@ const router = createRouter({
                 {
                     path: '/',
                     name: 'dashboard',
-                    component: () => import('@/features/dashboard/Dashboard.vue')
+                    component: () => import('@/features/dashboard/pages/Dashboard.vue')
                 },
                 {
                     path: '/uikit/formlayout',
@@ -100,45 +100,45 @@ const router = createRouter({
                 {
                     path: '/pages/empty',
                     name: 'empty',
-                    component: () => import('@/features/pages/Empty.vue')
+                    component: () => import('@/app/layout/EmptyLayout.vue')
                 },
                 {
                     path: '/pages/crud',
                     name: 'crud',
-                    component: () => import('@/features/pages/Crud.vue')
+                    component: () => import('@/features/examples/pages/Crud.vue')
                 },
                 {
                     path: '/start/documentation',
                     name: 'documentation',
-                    component: () => import('@/features/pages/Documentation.vue')
+                    component: () => import('@/features/docs/pages/Documentation.vue')
                 }
             ]
         },
         {
             path: '/landing',
             name: 'landing',
-            component: () => import('@/features/pages/Landing.vue')
+            component: () => import('@/features/home/pages/Landing.vue')
         },
         {
             path: '/pages/notfound',
             name: 'notfound',
-            component: () => import('@/features/pages/NotFound.vue')
+            component: () => import('@/app/pages/NotFound.vue')
         },
 
         {
             path: '/auth/login',
             name: 'login',
-            component: () => import('@/features/auth/Login.vue')
+            component: () => import('@/features/auth/pages/Login.vue')
         },
         {
             path: '/auth/access',
             name: 'accessDenied',
-            component: () => import('@/features/auth/Access.vue')
+            component: () => import('@/features/auth/pages/Access.vue')
         },
         {
             path: '/auth/error',
             name: 'error',
-            component: () => import('@/features/auth/Error.vue')
+            component: () => import('@/features/auth/pages/Error.vue')
         }
     ]
 });

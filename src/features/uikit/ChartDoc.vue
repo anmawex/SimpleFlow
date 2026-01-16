@@ -1,5 +1,5 @@
 <script setup>
-import { useLayout } from '@/layout/composables/layout';
+import { useLayout } from '@/app/layout/composables/layout';
 import { onMounted, ref, watch } from 'vue';
 
 const { layoutConfig, isDarkTheme } = useLayout();
