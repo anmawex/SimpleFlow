@@ -18,9 +18,13 @@ export default defineConfig({
             resolvers: [PrimeVueResolver()]
         })
     ],
+    // Added to migrate the structure to feature-based
     resolve: {
         alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url))
+            '@': fileURLToPath(new URL('./src', import.meta.url)),
+            '@app': fileURLToPath(new URL('./src/app', import.meta.url)),
+            '@features': fileURLToPath(new URL('./src/features', import.meta.url)),
+            '@shared': fileURLToPath(new URL('./src/shared', import.meta.url))
         }
     },
     css: {
