@@ -6,10 +6,15 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            component: AppLayout,
+            name: 'login',
+            component: () => import('@/features/auth/pages/Login.vue')
+        },
+        {
+            path: '/dashboard', // Nuevo prefijo para las rutas de la aplicación
+            component: AppLayout, // El layout principal de la aplicación
             children: [
                 {
-                    path: '/',
+                    path: '/dashboard',
                     name: 'dashboard',
                     component: () => import('@/features/dashboard/pages/Dashboard.vue')
                 },
@@ -123,12 +128,6 @@ const router = createRouter({
             path: '/pages/notfound',
             name: 'notfound',
             component: () => import('@/app/pages/NotFound.vue')
-        },
-
-        {
-            path: '/auth/login',
-            name: 'login',
-            component: () => import('@/features/auth/pages/Login.vue')
         },
         {
             path: '/auth/access',
