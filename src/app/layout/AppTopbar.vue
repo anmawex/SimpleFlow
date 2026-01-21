@@ -1,8 +1,43 @@
 <script setup>
 import { useLayout } from '@/app/layout/composables/layout';
+import { useAuthStore } from '@/features/auth/store/auth';
+import ConfirmDialog from 'primevue/confirmdialog';
+import { useConfirm } from 'primevue/useconfirm';
+import { computed } from 'vue';
+import { useRouter } from 'vue-router';
 import AppConfigurator from './AppConfigurator.vue';
 
 const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
+const authStore = useAuthStore();
+const router = useRouter();
+const confirm = useConfirm();
+
+// Obtener información del usuario
+const userEmail = computed(() => authStore.currentUser?.email || 'Usuario');
+const userInitials = computed(() => {
+    const email = authStore.currentUser?.email || '';
+    return email.charAt(0).toUpperCase();
+});
+
+// Función para cerrar sesión con confirmación
+const handleLogout = () => {
+    confirm.require({
+        message: '¿Estás seguro de que deseas cerrar sesión?',
+        header: 'Confirmar Cierre de Sesión',
+        icon: 'pi pi-exclamation-triangle',
+        rejectLabel: 'Cancelar',
+        acceptLabel: 'Cerrar Sesión',
+        rejectClass: 'p-button-secondary p-button-outlined',
+        acceptClass: 'p-button-danger',
+        accept: async () => {
+            await authStore.logout();
+            router.push('/');
+        },
+        reject: () => {
+            // Usuario canceló el logout
+        }
+    });
+};
 </script>
 
 <template>
@@ -30,7 +65,7 @@ const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
                     </g>
                 </svg>
 
-                <span>SAKAI</span>
+                <span>SimpleFlow</span>
             </router-link>
         </div>
 
@@ -58,22 +93,26 @@ const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
                 <i class="pi pi-ellipsis-v"></i>
             </button>
 
-            <div class="layout-topbar-menu hidden lg:block">
+            <div class="layout-topbar-menu hidden lg:flex">
                 <div class="layout-topbar-menu-content">
-                    <button type="button" class="layout-topbar-action">
-                        <i class="pi pi-calendar"></i>
-                        <span>Calendar</span>
-                    </button>
-                    <button type="button" class="layout-topbar-action">
-                        <i class="pi pi-inbox"></i>
-                        <span>Messages</span>
-                    </button>
-                    <button type="button" class="layout-topbar-action">
-                        <i class="pi pi-user"></i>
-                        <span>Profile</span>
+                    <!-- Información del Usuario -->
+                    <div class="layout-topbar-action" style="cursor: default; gap: 0.75rem;">
+                        <div class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-contrast font-semibold">
+                            {{ userInitials }}
+                        </div>
+                        <span class="font-medium">{{ userEmail }}</span>
+                    </div>
+                    
+                    <!-- Botón de Logout -->
+                    <button type="button" class="layout-topbar-action" @click="handleLogout" title="Cerrar sesión">
+                        <i class="pi pi-sign-out"></i>
+                        <span>Cerrar Sesión</span>
                     </button>
                 </div>
             </div>
         </div>
     </div>
+    
+    <!-- Modal de Confirmación -->
+    <ConfirmDialog></ConfirmDialog>
 </template>
