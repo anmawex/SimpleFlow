@@ -9,8 +9,14 @@ const router = useRouter();
 
 const email = ref('');
 const password = ref('');
-const checked = ref(false); // Se mantiene, aunque la lógica de "Remember me" no está conectada al store.
 const authError = ref(null);
+const emailError = ref('');
+const passwordError = ref('');
+const touched = ref({ email: false, password: false });
+
+// Regex para validar email
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const minPasswordLength = 6;
 
 // Observa si hay un error en el store y lo muestra localmente
 watch(
@@ -20,8 +26,74 @@ watch(
     }
 );
 
+// Validar email
+const validateEmail = () => {
+    if (!touched.value.email) return;
+    
+    if (!email.value) {
+        emailError.value = 'El email es requerido';
+    } else if (!emailRegex.test(email.value)) {
+        emailError.value = 'El formato del email no es válido';
+    } else {
+        emailError.value = '';
+    }
+};
+
+// Validar password
+const validatePassword = () => {
+    if (!touched.value.password) return;
+    
+    if (!password.value) {
+        passwordError.value = 'La contraseña es requerida';
+    } else if (password.value.length < minPasswordLength) {
+        passwordError.value = `La contraseña debe tener al menos ${minPasswordLength} caracteres`;
+    } else {
+        passwordError.value = '';
+    }
+};
+
+// Marcar campo como tocado y validar
+const handleEmailBlur = () => {
+    touched.value.email = true;
+    validateEmail();
+};
+
+const handlePasswordBlur = () => {
+    touched.value.password = true;
+    validatePassword();
+};
+
+// Validar mientras escribe (solo si ya fue tocado)
+watch(email, () => {
+    if (touched.value.email) {
+        validateEmail();
+    }
+});
+
+watch(password, () => {
+    if (touched.value.password) {
+        validatePassword();
+    }
+});
+
+// Validar todo el formulario antes de enviar
+const validateForm = () => {
+    touched.value.email = true;
+    touched.value.password = true;
+    validateEmail();
+    validatePassword();
+    
+    return !emailError.value && !passwordError.value;
+};
+
 const handleLogin = async () => {
     authError.value = null; // Limpia errores previos
+    
+    // Validar formulario
+    if (!validateForm()) {
+        return;
+    }
+    
     await authStore.login(email.value, password.value);
 
     if (authStore.isAuthenticated) {
@@ -56,29 +128,50 @@ const handleLogin = async () => {
                                 />
                             </g>
                         </svg>
-                        <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Welcome to PrimeLand!</div>
-                        <span class="text-muted-color font-medium">Sign in to continue</span>
+                        <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">¡Bienvenido a SimpleFlow!</div>
+                        <span class="text-muted-color font-medium">Inicia sesión para continuar</span>
                     </div>
 
                     <div>
                         <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
-                        <InputText id="email1" type="text" placeholder="Email address" class="w-full md:w-[30rem] mb-8" v-model="email" @keyup.enter="handleLogin" />
+                        <InputText 
+                            id="email1" 
+                            type="text" 
+                            placeholder="Correo electrónico" 
+                            class="w-full md:w-[30rem]" 
+                            :class="{ 'mb-2': emailError, 'mb-8': !emailError }"
+                            v-model="email" 
+                            @keyup.enter="handleLogin"
+                            @blur="handleEmailBlur"
+                            :invalid="!!emailError"
+                        />
+                        <small v-if="emailError" class="text-red-500 block mb-6">{{ emailError }}</small>
 
                         <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Password</label>
-                        <Password id="password1" v-model="password" placeholder="Password" :toggleMask="true" class="mb-4" fluid :feedback="false" @keyup.enter="handleLogin"></Password>
+                        <Password 
+                            id="password1" 
+                            v-model="password" 
+                            placeholder="Contraseña" 
+                            :toggleMask="true" 
+                            class="mb-2" 
+                            fluid 
+                            :feedback="false" 
+                            @keyup.enter="handleLogin"
+                            @blur="handlePasswordBlur"
+                            :invalid="!!passwordError"
+                        ></Password>
+                        <small v-if="passwordError" class="text-red-500 block mb-4">{{ passwordError }}</small>
+                        <div v-else class="mb-4"></div>
 
-                        <div class="flex items-center justify-between mt-2 mb-4 gap-8">
-                            <div class="flex items-center">
-                                <Checkbox v-model="checked" id="rememberme1" binary class="mr-2"></Checkbox>
-                                <label for="rememberme1">Remember me</label>
-                            </div>
-                            <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
-                        </div>
-
-                        <!-- Mensaje de Error -->
+                        <!-- Mensaje de Error de Autenticación -->
                         <div v-if="authError" class="text-red-500 text-center mb-4">{{ authError }}</div>
 
-                        <Button :label="authStore.loading ? 'Signing In...' : 'Sign In'" class="w-full" @click="handleLogin" :disabled="authStore.loading"></Button>
+                        <Button 
+                            :label="authStore.loading ? 'Iniciando sesión...' : 'Iniciar Sesión'" 
+                            class="w-full" 
+                            @click="handleLogin" 
+                            :disabled="authStore.loading || !email || !password"
+                        ></Button>
                     </div>
                 </div>
             </div>
