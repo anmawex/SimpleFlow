@@ -1,4 +1,5 @@
 import AppLayout from '@/app/layout/AppLayout.vue';
+import { useAuthStore } from '@/features/auth/store/auth';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
@@ -12,6 +13,7 @@ const router = createRouter({
         {
             path: '/dashboard', // Nuevo prefijo para las rutas de la aplicación
             component: AppLayout, // El layout principal de la aplicación
+            meta: { requiresAuth: true }, // Requiere autenticación
             children: [
                 {
                     path: '/dashboard',
@@ -140,6 +142,27 @@ const router = createRouter({
             component: () => import('@/features/auth/pages/Error.vue')
         }
     ]
+});
+
+// Navigation Guard - Protección de rutas
+router.beforeEach((to, from, next) => {
+    const authStore = useAuthStore();
+    
+    // Verificar si la ruta requiere autenticación
+    const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+    
+    if (requiresAuth && !authStore.isAuthenticated) {
+        // Si la ruta requiere auth y el usuario no está autenticado, redirigir al login
+        console.log('[ROUTER] Access denied. Redirecting to login.');
+        next({ name: 'login', query: { redirect: to.fullPath } });
+    } else if (to.name === 'login' && authStore.isAuthenticated) {
+        // Si el usuario ya está autenticado e intenta ir al login, redirigir al dashboard
+        console.log('[ROUTER] User already authenticated. Redirecting to dashboard.');
+        next({ name: 'dashboard' });
+    } else {
+        // Permitir la navegación
+        next();
+    }
 });
 
 export default router;

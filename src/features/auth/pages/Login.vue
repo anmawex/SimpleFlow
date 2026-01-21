@@ -1,8 +1,8 @@
 <script setup>
-import FloatingConfigurator from '@/shared/utilities/FloatingConfigurator.vue';
 import { useAuthStore } from '@/features/auth/store/auth';
-import { useRouter } from 'vue-router';
+import FloatingConfigurator from '@/shared/utilities/FloatingConfigurator.vue';
 import { ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -25,8 +25,9 @@ const handleLogin = async () => {
     await authStore.login(email.value, password.value);
 
     if (authStore.isAuthenticated) {
-        // El botón original navegaba a '/dashboard', así que respetamos esa ruta.
-        router.push('/dashboard');
+        // Redirigir a la página original o al dashboard
+        const redirectPath = router.currentRoute.value.query.redirect || '/dashboard';
+        router.push(redirectPath);
     }
 };
 </script>
@@ -61,10 +62,10 @@ const handleLogin = async () => {
 
                     <div>
                         <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
-                        <InputText id="email1" type="text" placeholder="Email address" class="w-full md:w-[30rem] mb-8" v-model="email" />
+                        <InputText id="email1" type="text" placeholder="Email address" class="w-full md:w-[30rem] mb-8" v-model="email" @keyup.enter="handleLogin" />
 
                         <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Password</label>
-                        <Password id="password1" v-model="password" placeholder="Password" :toggleMask="true" class="mb-4" fluid :feedback="false"></Password>
+                        <Password id="password1" v-model="password" placeholder="Password" :toggleMask="true" class="mb-4" fluid :feedback="false" @keyup.enter="handleLogin"></Password>
 
                         <div class="flex items-center justify-between mt-2 mb-4 gap-8">
                             <div class="flex items-center">

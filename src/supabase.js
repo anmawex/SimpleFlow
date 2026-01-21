@@ -10,10 +10,8 @@ import { createClient } from '@supabase/supabase-js';
 //    VITE_SUPABASE_URL="https://tu-proyecto-ref.supabase.co"
 //    VITE_SUPABASE_KEY="tu-llave-anon-publica"
 
-// const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-// const supabaseAnonKey = import.meta.env.VITE_SUPABASE_KEY;
-const supabaseUrl = 'https://rxfmvvoxjllrauhdsyus.supabase.co';
-const supabaseAnonKey = 'sb_publishable_eKv-Hh1hOhHUnaqgF9X2Lg_hRhBoNQ6';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
     throw new Error('Supabase URL or Anon Key is missing. Make sure to set them in your .env file.');
