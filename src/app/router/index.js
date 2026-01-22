@@ -23,17 +23,17 @@ const router = createRouter({
                 {
                     path: '/clients',
                     name: 'clients',
-                    component: () => import('@/features/examples/pages/ClientsPage.vue')
+                    component: () => import('@/features/clients/views/ClientsPage.vue')
                 },
                 {
                     path: '/invoices',
                     name: 'invoices',
-                    component: () => import('@/features/examples/pages/InvoicesPage.vue')
+                    component: () => import('@/features/invoices/views/InvoicesPage.vue')
                 },
                 {
                     path: '/payments',
                     name: 'payments',
-                    component: () => import('@/features/examples/pages/PaymentsPage.vue')
+                    component: () => import('@/features/payments/views/PaymentsPage.vue')
                 },
                 {
                     path: '/uikit/formlayout',

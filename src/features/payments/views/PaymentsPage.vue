@@ -1,5 +1,5 @@
 <script setup>
-import { useSupabaseCrud } from '@/composables/useSupabaseCrud';
+import { useSupabaseCrud } from '@/shared/composables/useSupabaseCrud';
 import { useToast } from 'primevue/usetoast';
 import { computed, onMounted, ref } from 'vue';
 

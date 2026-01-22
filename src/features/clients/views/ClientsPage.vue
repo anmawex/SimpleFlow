@@ -1,6 +1,6 @@
 <script setup>
-import { useSupabaseCrud } from '@/composables/useSupabaseCrud';
 import GenericCrud from '@/shared/components/GenericCrud.vue';
+import { useSupabaseCrud } from '@/shared/composables/useSupabaseCrud';
 import { useToast } from 'primevue/usetoast';
 import { onMounted } from 'vue';
 
