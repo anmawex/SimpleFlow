@@ -143,6 +143,7 @@ function exportCSV() {
                 <!-- Actions Column -->
                 <Column :exportable="false" style="min-width: 12rem">
                     <template #body="slotProps">
+                        <slot name="actions-start" :data="slotProps.data"></slot>
                         <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editItem(slotProps.data)" />
                         <Button icon="pi pi-trash" outlined rounded severity="danger" @click="confirmDeleteItem(slotProps.data)" />
                     </template>
