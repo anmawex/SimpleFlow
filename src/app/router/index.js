@@ -36,6 +36,11 @@ const router = createRouter({
                     component: () => import('@/features/invoices/views/InvoicesPage.vue')
                 },
                 {
+                    path: '/invoices/:id',
+                    name: 'invoice-details',
+                    component: () => import('@/features/invoices/views/InvoiceDetails.vue')
+                },
+                {
                     path: '/payments',
                     name: 'payments',
                     component: () => import('@/features/payments/views/PaymentsPage.vue')

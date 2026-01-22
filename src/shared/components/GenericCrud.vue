@@ -9,7 +9,9 @@ const props = defineProps({
     loading: { type: Boolean, default: false },
     columns: { type: Array, default: () => [] }, // [{field, header, sortable, type, style}]
     entityName: { type: String, default: 'Item' },
-    displayField: { type: String, default: 'name' } // Campo a mostrar en dialogos de confirmación (ej. name, title, id)
+    displayField: { type: String, default: 'name' }, // Campo a mostrar en dialogos de confirmación (ej. name, title, id)
+    showEdit: { type: Boolean, default: true },
+    showDelete: { type: Boolean, default: true }
 });
 
 const emit = defineEmits(['save', 'delete', 'delete-selected']);
@@ -145,8 +147,8 @@ function exportCSV() {
                 <Column :exportable="false" style="min-width: 12rem">
                     <template #body="slotProps">
                         <slot name="actions-start" :data="slotProps.data"></slot>
-                        <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editItem(slotProps.data)" />
-                        <Button icon="pi pi-trash" outlined rounded severity="danger" @click="confirmDeleteItem(slotProps.data)" />
+                        <Button v-if="showEdit" icon="pi pi-pencil" outlined rounded class="mr-2" @click="editItem(slotProps.data)" />
+                        <Button v-if="showDelete" icon="pi pi-trash" outlined rounded severity="danger" @click="confirmDeleteItem(slotProps.data)" />
                     </template>
                 </Column>
             </DataTable>

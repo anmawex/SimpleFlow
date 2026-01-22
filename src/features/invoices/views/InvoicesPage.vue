@@ -3,10 +3,12 @@ import GenericCrud from '@/shared/components/GenericCrud.vue';
 import { useSupabaseCrud } from '@/shared/composables/useSupabaseCrud';
 import { useToast } from 'primevue/usetoast';
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 // Usamos el composable conectado a la tabla 'invoices'
 const { items, loading, fetchAll, create, update, remove } = useSupabaseCrud('invoices');
 const toast = useToast();
+const router = useRouter();
 
 onMounted(() => {
     fetchAll();
@@ -116,6 +118,7 @@ const getStatusSeverity = (status) => {
         :items="items"
         :loading="loading"
         :columns="columns"
+        :showEdit="false"
         @save="handleSave"
         @delete="handleDelete"
         @delete-selected="handleDeleteSelected"
@@ -123,6 +126,11 @@ const getStatusSeverity = (status) => {
         <!-- Custom Status Badge -->
         <template #col-status="{ data }">
              <Tag :value="data.status" :severity="getStatusSeverity(data.status)" rounded />
+        </template>
+
+        <!-- Botón de detalle -->
+        <template #actions-start="{ data }">
+            <Button icon="pi pi-eye" outlined rounded severity="info" class="mr-2" @click="router.push(`/invoices/${data.id}`)" />
         </template>
         
         <!-- Custom Date Formatting (Optional override) -->
