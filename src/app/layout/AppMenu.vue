@@ -10,6 +10,16 @@ const model = ref([
                 label: 'Dashboard',
                 icon: 'pi pi-fw pi-home',
                 to: '/dashboard'
+            },
+            {
+                label: 'Clients',
+                icon: 'pi pi-fw pi-users',
+                to: '/clients'
+            },
+            {
+                label: 'Invoices',
+                icon: 'pi pi-fw pi-money-bill',
+                to: '/invoices'
             }
         ]
     },
