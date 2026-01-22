@@ -124,19 +124,20 @@ function exportCSV() {
                 
                 <!-- Dynamic Columns -->
                 <Column v-for="col in columns" :key="col.field" :field="col.field" :header="col.header" :sortable="col.sortable !== false" :style="col.style">
-                    <!-- Text/Default -->
-                    <template #body="slotProps" v-if="!col.type || col.type === 'text'">
-                         {{ slotProps.data[col.field] }}
+                    
+                    <!-- 1. Custom Slot (Highest Priority) -->
+                     <template #body="slotProps" v-if="$slots[`col-${col.field}`]">
+                         <slot :name="`col-${col.field}`" :data="slotProps.data"></slot>
                     </template>
 
-                    <!-- Currency -->
+                    <!-- 2. Currency Type -->
                     <template #body="slotProps" v-else-if="col.type === 'currency'">
                         {{ slotProps.data[col.field]?.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) }}
                     </template>
-                    
-                    <!-- Custom Slot (fallback if needed more complex types) -->
-                     <template #body="slotProps" v-else-if="$slots[`col-${col.field}`]">
-                         <slot :name="`col-${col.field}`" :data="slotProps.data"></slot>
+
+                    <!-- 3. Text/Default (Fallback) -->
+                    <template #body="slotProps" v-else>
+                         {{ slotProps.data[col.field] }}
                     </template>
                 </Column>
 

@@ -16,32 +16,59 @@ onMounted(() => {
 const columns = [
     { field: 'invoice_number', header: 'Invoice #', sortable: true, style: 'min-width: 10rem' },
     { field: 'client_name', header: 'Client', sortable: true, style: 'min-width: 12rem' },
-    { field: 'date', header: 'Date', sortable: true, style: 'min-width: 10rem' },
+    { field: 'created_at', header: 'Date', sortable: true, style: 'min-width: 10rem' },
+    { field: 'due_date', header: 'Due Date', sortable: true, style: 'min-width: 10rem' },
     { field: 'status', header: 'Status', sortable: true, style: 'min-width: 10rem' },
     { field: 'total', header: 'Total', sortable: true, type: 'currency', style: 'min-width: 10rem' }
 ];
 
 const statuses = ref([
-    { label: 'Draft', value: 'Draft' },
-    { label: 'Sent', value: 'Sent' },
     { label: 'Paid', value: 'Paid' },
-    { label: 'Overdue', value: 'Overdue' }
+    { label: 'Partial Payment', value: 'Partial Payment' },
+    { label: 'Overdue', value: 'Overdue' },
+    { label: 'Sent', value: 'Sent' },
+    { label: 'Draft', value: 'Draft' },
+    { label: 'Cancelled', value: 'Cancelled' }
 ]);
+
+const generateInvoiceNumber = () => {
+    // Simple random generator: INV-XXXX
+    const random = Math.floor(1000 + Math.random() * 9000);
+    return `INV-${random}`;
+};
+
+const formatDate = (value) => {
+    if (!value) return '-';
+    // Parse fecha segura
+    const date = new Date(value);
+    // Usar Intl para formato local robusto
+    return new Intl.DateTimeFormat('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    }).format(date); // Resultado: 22/01/2026
+};
 
 // Manejadores de eventos del GenericCrud
 const handleSave = async (item) => {
     try {
-        // Asegurarse de formatear la fecha si es necesario, o guardarla tal cual
-        // PrimeVue DatePicker devuelve un objeto Date
-        if (item.status && typeof item.status === 'object') {
-             item.status = item.status.value;
+        const payload = { ...item };
+        
+        // Manejar Status si viene de objeto
+        if (payload.status && typeof payload.status === 'object') {
+             payload.status = payload.status.value;
         }
 
-        if (item.id) {
-            await update(item.id, item);
+        if (payload.id) {
+            await update(payload.id, payload);
             toast.add({ severity: 'success', summary: 'Successful', detail: 'Invoice Updated', life: 3000 });
         } else {
-            await create(item);
+            // Generar número automático si es creación
+            if (!payload.invoice_number) {
+                payload.invoice_number = generateInvoiceNumber();
+            }
+            
+            await create(payload);
             toast.add({ severity: 'success', summary: 'Successful', detail: 'Invoice Created', life: 3000 });
         }
     } catch (e) {
@@ -68,6 +95,17 @@ const handleDeleteSelected = async (selectedItems) => {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Batch delete failed', life: 3000 });
     }
 };
+
+const getStatusSeverity = (status) => {
+    switch (status) {
+        case 'Paid': return 'success';
+        case 'Sent': return 'info';
+        case 'Overdue': return 'danger';
+        case 'Partial Payment': return 'warn';
+        case 'Cancelled': return 'contrast';
+        default: return 'secondary';
+    }
+};
 </script>
 
 <template>
@@ -82,26 +120,44 @@ const handleDeleteSelected = async (selectedItems) => {
         @delete="handleDelete"
         @delete-selected="handleDeleteSelected"
     >
+        <!-- Custom Status Badge -->
+        <template #col-status="{ data }">
+             <Tag :value="data.status" :severity="getStatusSeverity(data.status)" rounded />
+        </template>
+        
+        <!-- Custom Date Formatting (Optional override) -->
+         <template #col-created_at="{ data }">
+             {{ formatDate(data.created_at) }}
+        </template>
+        <template #col-due_date="{ data }">
+             {{ formatDate(data.due_date) }}
+        </template>
+
+
         <!-- Formulario personalizado para Facturas -->
         <template #form="{ item, submitted }">
-             <div>
-                <label for="invoice_number" class="block font-bold mb-3">Invoice Number</label>
-                <InputText id="invoice_number" v-model.trim="item.invoice_number" required="true" autofocus :invalid="submitted && !item.invoice_number" fluid />
-                <small v-if="submitted && !item.invoice_number" class="text-red-500">Invoice Number is required.</small>
+             <div v-if="item.id">
+                <label class="block font-bold mb-3">Invoice Number</label>
+                <InputText v-model="item.invoice_number" disabled fluid class="bg-surface-100" />
             </div>
+            
             <div>
                 <label for="client_name" class="block font-bold mb-3">Client Name</label>
-                <InputText id="client_name" v-model.trim="item.client_name" required="true" :invalid="submitted && !item.client_name" fluid />
+                <InputText id="client_name" v-model.trim="item.client_name" required="true" :invalid="submitted && !item.client_name" fluid autofocus />
                 <small v-if="submitted && !item.client_name" class="text-red-500">Client Name is required.</small>
             </div>
-             <div>
-                <label for="date" class="block font-bold mb-3">Date</label>
-                <DatePicker id="date" v-model="item.date" showIcon fluid :showOnFocus="false" />
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                 <div>
+                    <label for="due_date" class="block font-bold mb-3">Due Date</label>
+                    <DatePicker id="due_date" v-model="item.due_date" showIcon fluid :showOnFocus="false" />
+                </div>
+                 <div>
+                    <label for="status" class="block font-bold mb-3">Status</label>
+                    <Select id="status" v-model="item.status" :options="statuses" optionLabel="label" optionValue="value" placeholder="Select a Status" fluid />
+                </div>
             </div>
-             <div>
-                <label for="status" class="block font-bold mb-3">Status</label>
-                <Select id="status" v-model="item.status" :options="statuses" optionLabel="label" optionValue="value" placeholder="Select a Status" fluid />
-            </div>
+
             <div>
                 <label for="total" class="block font-bold mb-3">Total Amount</label>
                 <InputNumber id="total" v-model="item.total" mode="currency" currency="USD" locale="en-US" fluid />
