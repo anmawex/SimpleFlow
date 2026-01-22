@@ -26,6 +26,11 @@ const router = createRouter({
                     component: () => import('@/features/examples/pages/ClientsPage.vue')
                 },
                 {
+                    path: '/invoices',
+                    name: 'invoices',
+                    component: () => import('@/features/examples/pages/InvoicesPage.vue')
+                },
+                {
                     path: '/uikit/formlayout',
                     name: 'formlayout',
                     component: () => import('@/shared/uikit/FormLayout.vue')
