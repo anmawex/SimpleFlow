@@ -11,7 +11,8 @@ const props = defineProps({
     entityName: { type: String, default: 'Item' },
     displayField: { type: String, default: 'name' }, // Campo a mostrar en dialogos de confirmación (ej. name, title, id)
     showEdit: { type: Boolean, default: true },
-    showDelete: { type: Boolean, default: true }
+    showDelete: { type: Boolean, default: true },
+    manualClose: { type: Boolean, default: false } // Nueva prop para controlar el cierre
 });
 
 const emit = defineEmits(['save', 'delete', 'delete-selected']);
@@ -59,10 +60,23 @@ function deleteItem() {
 
 function saveItem() {
     submitted.value = true;
-    // Emitimos el item para que el padre lo guarde
-    emit('save', item.value);
-    // Asumimos éxito inmediato para MVP. En una app real, esperaríamos prop de éxito.
-    itemDialog.value = false; 
+    
+    if (props.manualClose) {
+        // En modo manual, pasamos una función callback para que el padre cierre cuando termine
+        const payload = { 
+            ...item.value, 
+            _closeDialog: () => { 
+                itemDialog.value = false; 
+                submitted.value = false; 
+            }
+        };
+        emit('save', payload);
+    } else {
+        // Comportamiento default (App antigua)
+        emit('save', item.value);
+        itemDialog.value = false;
+        submitted.value = false;
+    }
 }
 
 function confirmDeleteSelected() {
@@ -155,7 +169,7 @@ function exportCSV() {
         </div>
 
         <!-- Edit Dialog -->
-        <Dialog v-model:visible="itemDialog" :style="{ width: '450px' }" :header="`${entityName} Details`" :modal="true">
+        <Dialog v-model:visible="itemDialog" :style="{ width: '900px', maxWidth: '90vw' }" :header="`${entityName} Details`" :modal="true" class="p-fluid">
             <div class="flex flex-col gap-6">
                 <!-- Slot para el formulario específico -->
                 <slot name="form" :item="item" :submitted="submitted"></slot>

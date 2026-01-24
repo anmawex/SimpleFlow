@@ -1,6 +1,7 @@
 <script setup>
 import GenericCrud from '@/shared/components/GenericCrud.vue';
 import { useSupabaseCrud } from '@/shared/composables/useSupabaseCrud';
+import { supabase } from '@/supabase';
 import { useToast } from 'primevue/usetoast';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -10,9 +11,20 @@ const { items, loading, fetchAll, create, update, remove } = useSupabaseCrud('in
 const toast = useToast();
 const router = useRouter();
 
-onMounted(() => {
+// Estado local para clientes
+const clients = ref([]);
+const invoiceLineItems = ref([]);
+const formSubmitted = ref(false);
+
+onMounted(async () => {
     fetchAll();
+    loadClients();
 });
+
+const loadClients = async () => {
+    const { data } = await supabase.from('clients').select('id, name, company');
+    clients.value = data || [];
+};
 
 // Configuración de las columnas para la tabla
 const columns = [
@@ -25,55 +37,165 @@ const columns = [
 ];
 
 const statuses = ref([
+    { label: 'Sent', value: 'Sent' },
+    { label: 'Draft', value: 'Draft' },
     { label: 'Paid', value: 'Paid' },
     { label: 'Partial Payment', value: 'Partial Payment' },
     { label: 'Overdue', value: 'Overdue' },
-    { label: 'Sent', value: 'Sent' },
-    { label: 'Draft', value: 'Draft' },
     { label: 'Cancelled', value: 'Cancelled' }
 ]);
 
 const generateInvoiceNumber = () => {
-    // Simple random generator: INV-XXXX
     const random = Math.floor(1000 + Math.random() * 9000);
     return `INV-${random}`;
 };
 
 const formatDate = (value) => {
     if (!value) return '-';
-    // Parse fecha segura
     const date = new Date(value);
-    // Usar Intl para formato local robusto
     return new Intl.DateTimeFormat('es-ES', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric'
-    }).format(date); // Resultado: 22/01/2026
+    }).format(date);
 };
 
-// Manejadores de eventos del GenericCrud
+// --- Manejo de Items de Factura ---
+
+const addLineItem = () => {
+    invoiceLineItems.value.push({
+        description: '',
+        quantity: 1,
+        unit_price: 0,
+        total: 0
+    });
+};
+
+const removeLineItem = (index) => {
+    invoiceLineItems.value.splice(index, 1);
+    calculateTotal(null); // Recalcular total invoice
+};
+
+const updateLineTotal = (item) => {
+    item.total = (item.quantity || 0) * (item.unit_price || 0);
+    // Necesitamos recalcular el total de la factura. 
+    // Como no tenemos acceso directo al objeto 'item' del formulario desde aquí fácilmente sin inyectarlo,
+    // usaremos un watcher o un evento. Pero GenericCrud no expone el 'item' reactivo hacia arriba fácilmente fuera del slot.
+    // Hack: El slot padre pasa 'item'. Podemos inyectar una función en el slot que actualice el item padre.
+};
+
+// Esta función será llamada desde el template, recibe el 'invoiceItem' (padre) y actualiza su total
+const calculateInvoiceTotal = (invoiceItem) => {
+    const total = invoiceLineItems.value.reduce((acc, curr) => acc + curr.total, 0);
+    invoiceItem.total = total;
+};
+
+// Cuando abrimos el diálogo (via GenericCrud), queremos resetear items.
+// GenericCrud no emite evento 'open', pero podemos observar 'items' o limpiar tras guardar.
+
 const handleSave = async (item) => {
+    formSubmitted.value = true;
+    
+    // Extraer función de callback (si GenericCrud nos la envía)
+    const { _closeDialog, ...payload } = item;
+    
     try {
-        const payload = { ...item };
+        let isValid = true;
+        let errorMsg = '';
+
+        // 1. Validar Cliente
+        if (!payload.client_name) {
+            isValid = false;
+            errorMsg = 'Client is required';
+        }
         
-        // Manejar Status si viene de objeto
+        // 2. Validar Fecha Vencimiento
+        else if (!payload.due_date) {
+            isValid = false;
+            errorMsg = 'Due Date is required';
+        } 
+        else if (new Date(payload.due_date).setHours(0,0,0,0) < new Date().setHours(0,0,0,0)) {
+             isValid = false;
+             errorMsg = 'Due Date must be today or in the future';
+        }
+
+        // 3. Validar Items
+        else if (invoiceLineItems.value.length === 0) {
+            isValid = false;
+            errorMsg = 'At least one item is required';
+        } else {
+            // Validar items individuales
+            for (const line of invoiceLineItems.value) {
+                if (!line.description || !line.description.trim()) {
+                    isValid = false;
+                    errorMsg = 'Check item descriptions';
+                    break;
+                }
+                if (!line.quantity || line.quantity <= 0) {
+                    isValid = false;
+                    errorMsg = 'Quantity must be > 0';
+                    break;
+                }
+                if (line.unit_price === null || line.unit_price <= 0) {
+                    isValid = false;
+                    errorMsg = 'Price must be greater than 0';
+                    break;
+                }
+            }
+        }
+
+        if (!isValid) {
+             toast.add({ severity: 'error', summary: 'Validation Error', detail: errorMsg, life: 3000 });
+             return; // Detenemos aquí. El dialogo NO se cierra porque _closeDialog no se llama.
+        }
+        
+        // Manejar Status
         if (payload.status && typeof payload.status === 'object') {
              payload.status = payload.status.value;
         }
 
-        if (payload.id) {
-            await update(payload.id, payload);
+        if (payload.client_name && typeof payload.client_name === 'object') {
+            payload.client_name = payload.client_name.name;
+        }
+        
+        if (!payload.status) payload.status = 'Sent';
+
+        let invoiceId = payload.id;
+
+        if (invoiceId) {
+            await update(invoiceId, payload);
             toast.add({ severity: 'success', summary: 'Successful', detail: 'Invoice Updated', life: 3000 });
         } else {
-            // Generar número automático si es creación
-            if (!payload.invoice_number) {
-                payload.invoice_number = generateInvoiceNumber();
-            }
+            if (!payload.invoice_number) payload.invoice_number = generateInvoiceNumber();
             
-            await create(payload);
+            const newInvoice = await create(payload);
+            invoiceId = newInvoice.id;
+            
             toast.add({ severity: 'success', summary: 'Successful', detail: 'Invoice Created', life: 3000 });
         }
+
+        // Guardar Items
+        if (invoiceLineItems.value.length > 0 && invoiceId) {
+            const itemsToInsert = invoiceLineItems.value.map(li => ({
+                invoice_id: invoiceId,
+                description: li.description,
+                quantity: li.quantity,
+                unit_price: li.unit_price
+            }));
+
+            if (!payload.id) { 
+                 const { error: itemsErr } = await supabase.from('invoice_items').insert(itemsToInsert);
+                 if (itemsErr) console.error('Error saving items', itemsErr);
+            }
+        }
+        
+        // Limpiar y cerrar dialogo SOLO al final exitoso
+        invoiceLineItems.value = [];
+        formSubmitted.value = false;
+        if (_closeDialog) _closeDialog();
+
     } catch (e) {
+        console.error(e);
         toast.add({ severity: 'error', summary: 'Error', detail: 'Operation failed', life: 3000 });
     }
 };
@@ -119,6 +241,7 @@ const getStatusSeverity = (status) => {
         :loading="loading"
         :columns="columns"
         :showEdit="false"
+        :manualClose="true"
         @save="handleSave"
         @delete="handleDelete"
         @delete-selected="handleDeleteSelected"
@@ -133,42 +256,93 @@ const getStatusSeverity = (status) => {
             <Button icon="pi pi-eye" outlined rounded severity="info" class="mr-2" @click="router.push(`/invoices/${data.id}`)" />
         </template>
         
-        <!-- Custom Date Formatting (Optional override) -->
-         <template #col-created_at="{ data }">
+        <template #col-created_at="{ data }">
              {{ formatDate(data.created_at) }}
         </template>
         <template #col-due_date="{ data }">
              {{ formatDate(data.due_date) }}
         </template>
 
-
-        <!-- Formulario personalizado para Facturas -->
+        <!-- Formulario personalizado -->
         <template #form="{ item, submitted }">
              <div v-if="item.id">
                 <label class="block font-bold mb-3">Invoice Number</label>
                 <InputText v-model="item.invoice_number" disabled fluid class="bg-surface-100" />
             </div>
             
-            <div>
-                <label for="client_name" class="block font-bold mb-3">Client Name</label>
-                <InputText id="client_name" v-model.trim="item.client_name" required="true" :invalid="submitted && !item.client_name" fluid autofocus />
-                <small v-if="submitted && !item.client_name" class="text-red-500">Client Name is required.</small>
-            </div>
-            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                 <div>
-                    <label for="due_date" class="block font-bold mb-3">Due Date</label>
-                    <DatePicker id="due_date" v-model="item.due_date" showIcon fluid :showOnFocus="false" />
+                <!-- Cliente Select -->
+                <div>
+                     <label for="client_name" class="block font-bold mb-3">Client</label>
+                     <Select id="client_name" v-model="item.client_name" :options="clients" optionLabel="name" placeholder="Select Client" filter fluid :invalid="submitted && !item.client_name" />
+                     <small v-if="submitted && !item.client_name" class="text-red-500">Client is required.</small>
                 </div>
+
                  <div>
-                    <label for="status" class="block font-bold mb-3">Status</label>
-                    <Select id="status" v-model="item.status" :options="statuses" optionLabel="label" optionValue="value" placeholder="Select a Status" fluid />
+                     <label for="due_date" class="block font-bold mb-3">Due Date</label>
+                     <DatePicker id="due_date" v-model="item.due_date" showIcon fluid :showOnFocus="false" :invalid="submitted && (!item.due_date || new Date(item.due_date).setHours(0,0,0,0) < new Date().setHours(0,0,0,0))" />
+                     <small v-if="submitted && !item.due_date" class="text-red-500 block">Due Date is required.</small>
+                     <small v-else-if="submitted && new Date(item.due_date).setHours(0,0,0,0) < new Date().setHours(0,0,0,0)" class="text-red-500 block">Date cannot be in the past.</small>
                 </div>
             </div>
 
-            <div>
-                <label for="total" class="block font-bold mb-3">Total Amount</label>
-                <InputNumber id="total" v-model="item.total" mode="currency" currency="USD" locale="en-US" fluid />
+            <!-- Items Section -->
+             <div class="border rounded-lg p-4 mt-2 surface-ground" :class="{'border-red-500': formSubmitted && invoiceLineItems.length === 0}">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="font-bold">Items</span>
+                    <Button icon="pi pi-plus" size="small" label="Add Item" outlined @click="addLineItem" />
+                </div>
+                
+                <div v-if="invoiceLineItems.length === 0" class="text-center text-sm text-surface-500 py-2">
+                    <span v-if="formSubmitted" class="text-red-500 font-bold">At least one item is required.</span>
+                    <span v-else>No items added yet.</span>
+                </div>
+
+                <div v-else class="flex flex-col gap-3">
+                    <div v-for="(line, index) in invoiceLineItems" :key="index" class="grid grid-cols-12 gap-2 items-end pb-3 border-b border-surface-200">
+                        <div class="col-span-5">
+                            <label class="text-xs mb-1 block" v-if="index===0">Description</label>
+                            <InputText v-model="line.description" placeholder="Product/Service" fluid size="small" :invalid="formSubmitted && !line.description" />
+                            <small v-if="formSubmitted && !line.description" class="text-red-500 text-xs">Description required</small>
+                        </div>
+                        <div class="col-span-2">
+                             <label class="text-xs mb-1 block" v-if="index===0">Qty</label>
+                            <InputNumber v-model="line.quantity" size="small" fluid @input="(e) => { line.quantity = e.value; updateLineTotal(line); calculateInvoiceTotal(item); }" :invalid="formSubmitted && (!line.quantity || line.quantity <= 0)" />
+                            <small v-if="formSubmitted && (!line.quantity || line.quantity <= 0)" class="text-red-500 text-xs">Qty > 0</small>
+                        </div>
+                        <div class="col-span-2">
+                             <label class="text-xs mb-1 block" v-if="index===0">Price</label>
+                            <InputNumber v-model="line.unit_price" mode="currency" currency="USD" locale="en-US" size="small" fluid @input="(e) => { line.unit_price = e.value; updateLineTotal(line); calculateInvoiceTotal(item); }" :invalid="formSubmitted && (line.unit_price === null || line.unit_price <= 0)" />
+                            <small v-if="formSubmitted && (line.unit_price === null || line.unit_price <= 0)" class="text-red-500 text-xs text-nowrap block">Price > 0</small>
+                        </div>
+                        <div class="col-span-2">
+                             <label class="text-xs mb-1 block" v-if="index===0">Total</label>
+                            <span class="block py-2 font-bold text-right">{{ (line.total || 0).toLocaleString('en-US', {style:'currency', currency:'USD'}) }}</span>
+                        </div>
+                        <div class="col-span-1 flex justify-end">
+                            <Button icon="pi pi-trash" text severity="danger" @click="() => { removeLineItem(index); calculateInvoiceTotal(item); }" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end mt-2">
+                <div class="text-right">
+                    <span class="block text-surface-500 text-sm">Grand Total</span>
+                    <span class="block text-2xl font-bold text-primary">{{ (item.total || 0).toLocaleString('en-US', {style:'currency', currency:'USD'}) }}</span>
+                </div>
+            </div>
+            
+           
+            <div class="mt-4">
+                <label for="status" class="block font-bold mb-3">Save As</label>
+                <div class="flex gap-4">
+                     <RadioButton v-model="item.status" inputId="statusSent" name="status" value="Sent" />
+                    <label for="statusSent" class="cursor-pointer">Send Immediately (Default)</label>
+
+                    <RadioButton v-model="item.status" inputId="statusDraft" name="status" value="Draft" />
+                    <label for="statusDraft" class="cursor-pointer">Save as Draft</label>
+                </div>
             </div>
         </template>
     </GenericCrud>
