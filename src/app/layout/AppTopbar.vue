@@ -1,7 +1,6 @@
 <script setup>
 import { useLayout } from '@/app/layout/composables/layout';
 import { useAuthStore } from '@/features/auth/store/auth';
-import ConfirmDialog from 'primevue/confirmdialog';
 import { useConfirm } from 'primevue/useconfirm';
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
@@ -113,6 +112,4 @@ const handleLogout = () => {
         </div>
     </div>
     
-    <!-- Modal de Confirmación -->
-    <ConfirmDialog></ConfirmDialog>
 </template>
