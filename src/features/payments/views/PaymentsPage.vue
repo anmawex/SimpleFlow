@@ -1,11 +1,14 @@
 <script setup>
 import { useSupabaseCrud } from '@/shared/composables/useSupabaseCrud';
+import { supabase } from '@/supabase'; // Import supra
 import { useToast } from 'primevue/usetoast';
 import { computed, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-// Reutilizamos la lógica de conexión a datos (el composable), pero NO el componente visual GenericCrud
-const { items: payments, loading, fetchAll, create } = useSupabaseCrud('payments');
+// Usamos el composable pero sobreescribimos la carga
+const { items: payments, loading, create } = useSupabaseCrud('payments');
 const toast = useToast();
+const router = useRouter();
 
 const showSidebar = ref(false);
 const newPayment = ref({
@@ -21,13 +24,32 @@ const paymentMethods = ref(['Transfer', 'Credit Card', 'Cash', 'Check']);
 const statuses = ref(['Completed', 'Pending', 'Failed', 'Refunded']);
 
 onMounted(() => {
-    fetchAll();
+    fetchPaymentsCustom();
 });
+
+const fetchPaymentsCustom = async () => {
+    loading.value = true;
+    try {
+        // Carga personalizada con Join a Invoices para saber si está cancelada
+        const { data, error } = await supabase
+            .from('payments')
+            .select('*, invoice:invoices(status, invoice_number)')
+            .order('payment_date', { ascending: false });
+            
+        if (error) throw error;
+        payments.value = data || [];
+    } catch (e) {
+        console.error(e);
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Could not load payments', life: 3000 });
+    } finally {
+        loading.value = false;
+    }
+}
 
 const formatCurrency = (value) => {
     return value ? value.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) : '$0.00';
 };
-
+// ... rest of functions
 const formatDate = (dateStr) => {
     if(!dateStr) return '';
     return new Date(dateStr).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -46,13 +68,13 @@ const savePayment = async () => {
     try {
         await create({
             ...newPayment.value,
-            // Asegurar que guardamos la fecha en formato correcto si es objeto
             payment_date: newPayment.value.payment_date 
         });
         toast.add({ severity: 'success', summary: 'Success', detail: 'Payment registered', life: 3000 });
         showSidebar.value = false;
-        // Reset form
         newPayment.value = { description: '', amount: null, client_name: '', payment_method: 'Transfer', status: 'Completed', payment_date: new Date() };
+        // Recargar datos para traer relaciones si es necesario (o solo push simple si no importa)
+        fetchPaymentsCustom(); 
     } catch (e) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Could not register payment', life: 3000 });
     }
@@ -110,8 +132,25 @@ const totalAmount = computed(() => {
                 <DataTable :value="payments" :loading="loading" stripedRows paginator :rows="5">
                     <Column field="description" header="Description">
                         <template #body="{ data }">
-                            <span class="font-medium">{{ data.description }}</span>
+                            <div class="flex items-center gap-2">
+                                <span class="font-medium" :class="{'line-through text-surface-500': data.invoice?.status === 'Cancelled'}">{{ data.description }}</span>
+                                <i v-if="data.invoice?.status === 'Cancelled'" 
+                                   class="pi pi-exclamation-circle text-orange-500 cursor-help"
+                                   v-tooltip.top="'Invoice was Cancelled (' + (data.invoice?.invoice_number || 'N/A') + ')'">
+                                </i>
+                            </div>
                             <div class="text-sm text-surface-500">{{ data.client_name }}</div>
+                        </template>
+                    </Column>
+                    <Column header="Invoice #">
+                         <template #body="{ data }">
+                            <span v-if="!data.invoice_id" class="text-surface-500">-</span>
+                             <a v-else 
+                                href="#" 
+                                class="text-primary hover:underline font-medium"
+                                @click.prevent="router.push(`/invoices/${data.invoice_id}`)">
+                                {{ data.invoice?.invoice_number || 'View' }}
+                            </a>
                         </template>
                     </Column>
                     <Column field="payment_date" header="Date">
