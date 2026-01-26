@@ -1,23 +1,19 @@
 <script setup>
 import { useSupabaseCrud } from '@/shared/composables/useSupabaseCrud';
 import { supabase } from '@/supabase'; // Import supra
+import { FilterMatchMode } from '@primevue/core/api'; // Import filtros corregido
 import { useToast } from 'primevue/usetoast';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 // Usamos el composable pero sobreescribimos la carga
-const { items: payments, loading, create } = useSupabaseCrud('payments');
+const { items: payments, loading } = useSupabaseCrud('payments');
 const toast = useToast();
 const router = useRouter();
 
-const showSidebar = ref(false);
-const newPayment = ref({
-    description: '',
-    amount: null,
-    client_name: '',
-    payment_method: 'Transfer',
-    status: 'Completed',
-    payment_date: new Date()
+const filters = ref({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    payment_method: { value: null, matchMode: FilterMatchMode.EQUALS }
 });
 
 const paymentMethods = ref(['Transfer', 'Credit Card', 'Cash', 'Check']);
@@ -64,21 +60,7 @@ const getStatusColor = (status) => {
     }
 };
 
-const savePayment = async () => {
-    try {
-        await create({
-            ...newPayment.value,
-            payment_date: newPayment.value.payment_date 
-        });
-        toast.add({ severity: 'success', summary: 'Success', detail: 'Payment registered', life: 3000 });
-        showSidebar.value = false;
-        newPayment.value = { description: '', amount: null, client_name: '', payment_method: 'Transfer', status: 'Completed', payment_date: new Date() };
-        // Recargar datos para traer relaciones si es necesario (o solo push simple si no importa)
-        fetchPaymentsCustom(); 
-    } catch (e) {
-        toast.add({ severity: 'error', summary: 'Error', detail: 'Could not register payment', life: 3000 });
-    }
-};
+
 
 const totalAmount = computed(() => {
     return payments.value.reduce((acc, curr) => acc + (Number(curr.amount) || 0), 0);
@@ -92,8 +74,8 @@ const totalAmount = computed(() => {
             <div class="card mb-0 bg-primary/10 border-primary/20 border">
                 <div class="flex justify-between mb-4">
                     <div>
-                        <span class="block text-surface-500 font-medium mb-4">Total Revenue</span>
-                        <div class="text-surface-900 font-bold text-3xl">{{ formatCurrency(totalAmount) }}</div>
+                        <span class="block text-surface-500 dark:text-surface-400 font-medium mb-4">Total Revenue</span>
+                        <div class="text-surface-900 dark:text-surface-0 font-bold text-3xl">{{ formatCurrency(totalAmount) }}</div>
                     </div>
                     <div class="flex items-center justify-center bg-primary rounded-border" style="width: 2.5rem; height: 2.5rem">
                         <i class="pi pi-dollar text-primary-contrast text-xl" />
@@ -108,8 +90,8 @@ const totalAmount = computed(() => {
              <div class="card mb-0">
                 <div class="flex justify-between mb-4">
                     <div>
-                        <span class="block text-surface-500 font-medium mb-4">Transactions</span>
-                        <div class="text-surface-900 font-bold text-3xl">{{ payments.length }}</div>
+                        <span class="block text-surface-500 dark:text-surface-400 font-medium mb-4">Transactions</span>
+                        <div class="text-surface-900 dark:text-surface-0 font-bold text-3xl">{{ payments.length }}</div>
                     </div>
                     <div class="flex items-center justify-center bg-blue-100 rounded-border" style="width: 2.5rem; height: 2.5rem">
                         <i class="pi pi-receipt text-blue-500 text-xl" />
@@ -121,15 +103,34 @@ const totalAmount = computed(() => {
         </div>
 
         <div class="col-span-12 lg:col-span-4 flex items-center justify-end">
-             <Button label="New Payment" icon="pi pi-plus" size="large" @click="showSidebar = true" />
+             <!-- Espacio vacio o mas stats -->
         </div>
 
         <!-- Main List Area -->
         <div class="col-span-12">
             <div class="card">
-                <h5 class="mb-4 text-xl font-semibold">Payment History</h5>
+                <div class="flex flex-col md:flex-row gap-4 mb-4 justify-between">
+                    <h5 class="text-xl font-semibold m-0 self-center">Payment History</h5>
+                    <div class="flex gap-2">
+                         <IconField iconPosition="left">
+                            <InputIcon>
+                                <i class="pi pi-search" />
+                            </InputIcon>
+                            <InputText v-model="filters['global'].value" placeholder="Search Client or Invoice" />
+                        </IconField>
+                        <Select v-model="filters['payment_method'].value" :options="paymentMethods" showClear placeholder="Method" class="w-40" />
+                    </div>
+                </div>
                 
-                <DataTable :value="payments" :loading="loading" stripedRows paginator :rows="5">
+                <DataTable 
+                    :value="payments" 
+                    :loading="loading" 
+                    stripedRows 
+                    paginator 
+                    :rows="10" 
+                    v-model:filters="filters"
+                    :globalFilterFields="['client_name', 'invoice.invoice_number', 'description']"
+                >
                     <Column field="description" header="Description">
                         <template #body="{ data }">
                             <div class="flex items-center gap-2">
@@ -181,41 +182,6 @@ const totalAmount = computed(() => {
         </div>
         
         <!-- Sidebar for New Payment -->
-        <Sidebar v-model:visible="showSidebar" position="right" class="w-full md:w-[400px]" header="Register Payment">
-            <div class="flex flex-col gap-6 mt-4">
-                <div class="flex flex-col gap-2">
-                    <label class="font-bold">Description</label>
-                    <InputText v-model="newPayment.description" placeholder="e.g. Graphic Design Service" fluid />
-                </div>
-                
-                <div class="flex flex-col gap-2">
-                    <label class="font-bold">Amount</label>
-                    <InputNumber v-model="newPayment.amount" mode="currency" currency="USD" locale="en-US" placeholder="0.00" fluid class="p-inputtext-lg" />
-                </div>
 
-                <div class="flex flex-col gap-2">
-                    <label class="font-bold">Date</label>
-                    <DatePicker v-model="newPayment.payment_date" showIcon fluid />
-                </div>
-
-                <div class="flex flex-col gap-2">
-                    <label class="font-bold">Client</label>
-                    <InputText v-model="newPayment.client_name" placeholder="Client Name" fluid />
-                </div>
-
-                 <div class="grid grid-cols-2 gap-4">
-                    <div class="flex flex-col gap-2">
-                        <label class="font-bold">Method</label>
-                        <Select v-model="newPayment.payment_method" :options="paymentMethods" fluid />
-                    </div>
-                    <div class="flex flex-col gap-2">
-                        <label class="font-bold">Status</label>
-                        <Select v-model="newPayment.status" :options="statuses" fluid />
-                    </div>
-                </div>
-
-                <Button label="Register Payment" icon="pi pi-check" class="mt-4" @click="savePayment" :loading="loading" />
-            </div>
-        </Sidebar>
     </div>
 </template>
