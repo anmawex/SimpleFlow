@@ -28,7 +28,7 @@ const model = ref([
             }
         ]
     },
-    {
+   /* {
         label: 'UI Components',
         path: '/uikit',
         items: [
@@ -109,25 +109,25 @@ const model = ref([
                 to: '/uikit/misc'
             }
         ]
-    },
-    {
-        label: 'Prime Blocks',
-        icon: 'pi pi-fw pi-prime',
-        path: '/blocks',
-        items: [
-            {
-                label: 'Free Blocks',
-                icon: 'pi pi-fw pi-eye',
-                to: '/blocks/free'
-            },
-            {
-                label: 'All Blocks',
-                icon: 'pi pi-fw pi-globe',
-                url: 'https://blocks.primevue.org/',
-                target: '_blank'
-            }
-        ]
-    },
+    },*/
+    // {
+    //     label: 'Prime Blocks',
+    //     icon: 'pi pi-fw pi-prime',
+    //     path: '/blocks',
+    //     items: [
+    //         {
+    //             label: 'Free Blocks',
+    //             icon: 'pi pi-fw pi-eye',
+    //             to: '/blocks/free'
+    //         },
+    //         {
+    //             label: 'All Blocks',
+    //             icon: 'pi pi-fw pi-globe',
+    //             url: 'https://blocks.primevue.org/',
+    //             target: '_blank'
+    //         }
+    //     ]
+    // },
     {
         label: 'Pages',
         icon: 'pi pi-fw pi-briefcase',
@@ -177,7 +177,7 @@ const model = ref([
             }
         ]
     },
-    {
+    /* {
         label: 'Hierarchy',
         icon: 'pi pi-fw pi-align-left',
         path: '/hierarchy',
@@ -253,7 +253,7 @@ const model = ref([
                 ]
             }
         ]
-    },
+    }, */
     {
         label: 'Get Started',
         path: '/start',

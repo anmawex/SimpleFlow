@@ -45,7 +45,7 @@ const router = createRouter({
                     name: 'payments',
                     component: () => import('@/features/payments/views/PaymentsPage.vue')
                 },
-                {
+                /* {
                     path: '/uikit/formlayout',
                     name: 'formlayout',
                     component: () => import('@/shared/uikit/FormLayout.vue')
@@ -120,7 +120,7 @@ const router = createRouter({
                     path: '/uikit/timeline',
                     name: 'timeline',
                     component: () => import('@/shared/uikit/TimelineDoc.vue')
-                },
+                }, */
                 {
                     path: '/blocks/free',
                     name: 'blocks',
