@@ -3,7 +3,10 @@ import { supabase } from '@/supabase';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
 import { computed, onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
+
+const { t, locale } = useI18n();
 
 const route = useRoute();
 const router = useRouter();
@@ -23,9 +26,15 @@ const newPayment = ref({
     amount: 0,
     payment_method: 'Transfer',
     payment_date: new Date(),
-    description: 'Payment for Invoice'
+    description: t('invoices.register_payment')
 });
-const paymentMethods = ref(['Transfer', 'Cash', 'Credit Card', 'Check', 'Other']);
+const paymentMethods = computed(() => [
+    { label: t('invoices.method_transfer'), value: 'Transfer' },
+    { label: t('invoices.method_cash'), value: 'Cash' },
+    { label: t('invoices.method_card'), value: 'Credit Card' },
+    { label: t('invoices.method_check'), value: 'Check' },
+    { label: t('invoices.method_other'), value: 'Other' }
+]);
 
 const invoiceId = route.params.id;
 
@@ -57,7 +66,7 @@ const loadInvoiceData = async () => {
 
     } catch (error) {
         console.error('Error loading invoice:', error);
-        toast.add({ severity: 'error', summary: 'Error', detail: 'Could not load invoice details', life: 3000 });
+        toast.add({ severity: 'error', summary: t('common.error'), detail: t('invoices.load_error'), life: 3000 });
     } finally {
         loading.value = false;
     }
@@ -80,14 +89,14 @@ const openPaymentDialog = () => {
         amount: remainingBalance.value,
         payment_method: 'Transfer',
         payment_date: new Date(),
-        description: `Payment for ${invoice.value.invoice_number}`
+        description: t('invoices.payment_description', { number: invoice.value.invoice_number })
     };
     paymentDialog.value = true;
 };
 
 const registerPayment = async () => {
     if (newPayment.value.amount <= 0) {
-        toast.add({ severity: 'warn', summary: 'Invalid Amount', detail: 'Amount must be greater than 0', life: 3000 });
+        toast.add({ severity: 'warn', summary: t('common.error'), detail: t('invoices.validation.price_positive'), life: 3000 });
         return;
     }
 
@@ -123,15 +132,15 @@ const registerPayment = async () => {
         if (newStatus !== invoice.value.status) {
             await supabase.from('invoices').update({ status: newStatus }).eq('id', invoiceId);
             invoice.value.status = newStatus;
-            toast.add({ severity: 'info', summary: 'Status Updated', detail: `Invoice marked as ${newStatus}`, life: 3000 });
+            toast.add({ severity: 'info', summary: t('invoices.status_updated'), detail: t(`dashboard.status.${newStatus.toLowerCase().replace(' ', '') === 'partialpayment' ? 'pending' : newStatus.toLowerCase()}`), life: 3000 });
         }
 
-        toast.add({ severity: 'success', summary: 'Payment Registered', detail: 'Transaction saved successfully', life: 3000 });
+        toast.add({ severity: 'success', summary: t('invoices.payment_registered'), detail: t('common.successful'), life: 3000 });
         paymentDialog.value = false;
 
     } catch (e) {
         console.error(e);
-        toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to register payment', life: 3000 });
+        toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.operation_failed'), life: 3000 });
     } finally {
         paymentLoading.value = false;
     }
@@ -139,29 +148,29 @@ const registerPayment = async () => {
 
 const confirmCancelInvoice = () => {
     confirm.require({
-        message: 'Are you sure you want to cancel this invoice? This action cannot be undone easily.',
-        header: 'Confirm Cancellation',
+        message: t('invoices.confirm_cancel'),
+        header: t('invoices.cancel_invoice'),
         icon: 'pi pi-exclamation-triangle',
         acceptClass: 'p-button-danger',
         accept: async () => {
             try {
                 await supabase.from('invoices').update({ status: 'Cancelled' }).eq('id', invoiceId);
                 invoice.value.status = 'Cancelled';
-                toast.add({ severity: 'success', summary: 'Cancelled', detail: 'Invoice has been cancelled', life: 3000 });
+                toast.add({ severity: 'success', summary: t('invoices.invoice_cancelled'), detail: t('common.successful'), life: 3000 });
             } catch (e) {
-                toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to cancel invoice', life: 3000 });
+                toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.operation_failed'), life: 3000 });
             }
         }
     });
 };
 
 // --- Formatters ---
-const formatCurrency = (val) => (val || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+const formatCurrency = (val) => (val || 0).toLocaleString(locale.value === 'en' ? 'en-US' : 'es-ES', { style: 'currency', currency: 'USD' });
 const formatDate = (dateString) => {
     if (!dateString) return '-';
     const date = new Date(dateString);
     if (isNaN(date.getTime())) return '-';
-    return new Intl.DateTimeFormat('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(date);
+    return new Intl.DateTimeFormat(locale.value === 'en' ? 'en-US' : 'es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(date);
 };
 const getStatusSeverity = (status) => {
     switch (status) {
@@ -184,23 +193,23 @@ const goBack = () => router.push('/invoices');
     <div v-else class="flex flex-col gap-6 fade-in-up">
         <!-- Header -->
         <div>
-            <Button label="Back to Invoices" icon="pi pi-arrow-left" text @click="goBack" class="mb-4" />
+            <Button :label="$t('invoices.back_to_invoices')" icon="pi pi-arrow-left" text @click="goBack" class="mb-4" />
             
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 card mb-0">
                 <div>
-                     <span class="text-surface-500 block mb-1">Invoice #</span>
+                     <span class="text-surface-500 block mb-1">{{ $t('invoices.invoice_number') }}</span>
                     <h1 class="text-3xl font-bold m-0 text-primary">{{ invoice.invoice_number }}</h1>
                 </div>
                  <div class="flex items-center gap-3">
                      <!-- Action Buttons -->
                      <div class="flex gap-2 mr-4" v-if="invoice.status !== 'Cancelled'">
-                         <Button v-if="invoice.status !== 'Paid'" label="Add Payment" icon="pi pi-plus" severity="success" @click="openPaymentDialog" />
-                         <Button label="Cancel" icon="pi pi-times" severity="danger" outlined @click="confirmCancelInvoice" />
+                         <Button v-if="invoice.status !== 'Paid'" :label="$t('invoices.add_payment')" icon="pi pi-plus" severity="success" @click="openPaymentDialog" />
+                         <Button :label="$t('common.cancel')" icon="pi pi-times" severity="danger" outlined @click="confirmCancelInvoice" />
                      </div>
 
                     <div class="text-right">
-                        <span class="block text-sm text-surface-500">Status</span>
-                        <Tag :value="invoice.status" :severity="getStatusSeverity(invoice.status)" class="text-base px-3 py-1" />
+                        <span class="block text-sm text-surface-500">{{ $t('invoices.status') }}</span>
+                        <Tag :value="$t(`dashboard.status.${invoice.status.toLowerCase().replace(' ', '_')}`)" :severity="getStatusSeverity(invoice.status)" class="text-base px-3 py-1" />
                     </div>
                 </div>
             </div>
@@ -211,27 +220,27 @@ const goBack = () => router.push('/invoices');
             <div class="col-span-12 lg:col-span-8 flex flex-col gap-6">
                 <!-- Client Info Card -->
                 <Card>
-                    <template #title>Client Details</template>
+                    <template #title>{{ $t('invoices.client_details') }}</template>
                     <template #content>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <span class="text-surface-500 text-sm block">Name</span>
+                                <span class="text-surface-500 text-sm block">{{ $t('clients.name') }}</span>
                                 <span class="font-medium text-lg">{{ client.name }}</span>
                             </div>
                             <div>
-                                <span class="text-surface-500 text-sm block">Company</span>
+                                <span class="text-surface-500 text-sm block">{{ $t('clients.company') }}</span>
                                 <span class="font-medium text-lg">{{ client.company || '-' }}</span>
                             </div>
                             <div>
-                                <span class="text-surface-500 text-sm block">Email</span>
+                                <span class="text-surface-500 text-sm block">{{ $t('clients.email') }}</span>
                                 <span class="font-medium">{{ client.email || '-' }}</span>
                             </div>
                             <div>
-                                <span class="text-surface-500 text-sm block">Invoice Date</span>
+                                <span class="text-surface-500 text-sm block">{{ $t('invoices.date') }}</span>
                                 <span class="font-medium">{{ formatDate(invoice.created_at) }}</span>
                             </div>
                              <div>
-                                <span class="text-surface-500 text-sm block">Due Date</span>
+                                <span class="text-surface-500 text-sm block">{{ $t('invoices.due_date') }}</span>
                                 <span class="font-medium" :class="{'text-red-500': invoice.status === 'Overdue'}">{{ formatDate(invoice.due_date) }}</span>
                             </div>
                         </div>
@@ -240,20 +249,20 @@ const goBack = () => router.push('/invoices');
 
                 <!-- Invoice Items Table -->
                 <Card>
-                    <template #title>Items</template>
+                    <template #title>{{ $t('invoices.items') }}</template>
                     <template #content>
                         <DataTable :value="invoiceItems" size="small" stripedRows showGridlines v-if="invoiceItems.length > 0">
-                            <Column field="description" header="Description"></Column>
-                            <Column field="quantity" header="Qty" style="width: 5rem" class="text-center"></Column>
-                            <Column field="unit_price" header="Price" style="width: 8rem">
+                            <Column field="description" :header="$t('invoices.description')"></Column>
+                            <Column field="quantity" :header="$t('invoices.qty')" style="width: 5rem" class="text-center"></Column>
+                            <Column field="unit_price" :header="$t('invoices.price')" style="width: 8rem">
                                 <template #body="{ data }">{{ formatCurrency(data.unit_price) }}</template>
                             </Column>
-                            <Column field="total" header="Total" style="width: 8rem" class="text-right font-bold">
+                            <Column field="total" :header="$t('invoices.total')" style="width: 8rem" class="text-right font-bold">
                                 <template #body="{ data }">{{ formatCurrency(data.total) }}</template>
                             </Column>
                         </DataTable>
                         <div v-else class="text-center py-4 text-surface-500 italic">
-                            No items found for this invoice.
+                            {{ $t('invoices.no_items') }}
                         </div>
                     </template>
                 </Card>
@@ -264,13 +273,13 @@ const goBack = () => router.push('/invoices');
                 <!-- Financial Summary -->
                 <div class="card p-6 flex flex-col gap-6 border border-surface-200 dark:border-surface-700 bg-surface-50 dark:bg-surface-800">
                     <div>
-                        <span class="text-surface-500 dark:text-surface-400 block mb-1">Total Amount</span>
+                        <span class="text-surface-500 dark:text-surface-400 block mb-1">{{ $t('invoices.total_amount') }}</span>
                         <span class="text-4xl font-bold text-surface-900 dark:text-surface-0">{{ formatCurrency(totalAmount) }}</span>
                     </div>
 
                     <div>
                         <div class="flex justify-between text-sm mb-2">
-                            <span class="text-surface-500 dark:text-surface-400 font-medium">Paid: {{ formatCurrency(totalPaid) }}</span>
+                            <span class="text-surface-500 dark:text-surface-400 font-medium">{{ $t('invoices.paid') }}: {{ formatCurrency(totalPaid) }}</span>
                             <span class="text-surface-500 dark:text-surface-400 font-medium">{{ progressPercentage }}%</span>
                         </div>
                         <ProgressBar :value="progressPercentage" :showValue="false" style="height: 10px;" />
@@ -279,7 +288,7 @@ const goBack = () => router.push('/invoices');
                     <div class="perm-divider border-t border-surface-200 dark:border-surface-600 my-2"></div>
 
                     <div class="flex justify-between items-center">
-                        <span class="text-surface-500 dark:text-surface-400 font-medium">Remaining Balance</span>
+                        <span class="text-surface-500 dark:text-surface-400 font-medium">{{ $t('invoices.remaining_balance') }}</span>
                         <span class="text-2xl font-bold" :class="remainingBalance > 0 ? 'text-orange-500' : 'text-green-500'">
                             {{ formatCurrency(remainingBalance) }}
                         </span>
@@ -288,20 +297,20 @@ const goBack = () => router.push('/invoices');
 
                 <!-- Payment History -->
                 <Card>
-                    <template #title>Payment History</template>
+                    <template #title>{{ $t('invoices.payment_history') }}</template>
                     <template #content>
                         <div v-if="payments.length > 0" class="flex flex-col gap-4">
                              <div v-for="pay in payments" :key="pay.id" class="flex items-center justify-between p-3 border rounded-lg border-surface-200">
                                 <div>
                                     <span class="block font-medium">{{ formatDate(pay.payment_date) }}</span>
-                                    <span class="text-xs text-surface-500">{{ pay.payment_method }}</span>
+                                    <span class="text-xs text-surface-500">{{ $t(`invoices.method_${pay.payment_method.toLowerCase().replace(' ', '')}`) }}</span>
                                     <div class="text-xs text-surface-400 text-ellipsis overflow-hidden w-40 whitespace-nowrap">{{ pay.description }}</div>
                                 </div>
                                 <span class="font-bold text-primary">{{ formatCurrency(pay.amount) }}</span>
                             </div>
                         </div>
                         <div v-else class="text-center py-4 text-surface-500 italic">
-                            No payments recorded yet.
+                            {{ $t('invoices.no_payments') }}
                         </div>
                     </template>
                 </Card>
@@ -309,29 +318,29 @@ const goBack = () => router.push('/invoices');
         </div>
 
         <!-- Payment Dialog -->
-        <Dialog v-model:visible="paymentDialog" header="Register Payment" modal class="p-fluid" :style="{ width: '400px' }">
+        <Dialog v-model:visible="paymentDialog" :header="$t('invoices.register_payment')" modal class="p-fluid" :style="{ width: '400px' }">
             <div class="flex flex-col gap-4">
                 <div>
-                    <label class="font-bold block mb-2">Amount</label>
-                    <InputNumber v-model="newPayment.amount" mode="currency" currency="USD" locale="en-US" :max="remainingBalance" />
-                    <small class="text-surface-500">Max: {{ formatCurrency(remainingBalance) }}</small>
+                    <label class="font-bold block mb-2">{{ $t('invoices.amount') }}</label>
+                    <InputNumber v-model="newPayment.amount" mode="currency" currency="USD" :locale="locale === 'en' ? 'en-US' : 'es-ES'" :max="remainingBalance" />
+                    <small class="text-surface-500">{{ $t('invoices.max') }}: {{ formatCurrency(remainingBalance) }}</small>
                 </div>
                 <div>
-                    <label class="font-bold block mb-2">Date</label>
+                    <label class="font-bold block mb-2">{{ $t('invoices.date') }}</label>
                     <DatePicker v-model="newPayment.payment_date" showIcon fluid />
                 </div>
                  <div>
-                    <label class="font-bold block mb-2">Method</label>
-                    <Select v-model="newPayment.payment_method" :options="paymentMethods" />
+                    <label class="font-bold block mb-2">{{ $t('invoices.method') }}</label>
+                    <Select v-model="newPayment.payment_method" :options="paymentMethods" optionLabel="label" optionValue="value" />
                 </div>
                  <div>
-                    <label class="font-bold block mb-2">Note</label>
+                    <label class="font-bold block mb-2">{{ $t('invoices.note') }}</label>
                     <InputText v-model="newPayment.description" />
                 </div>
             </div>
             <template #footer>
-                <Button label="Cancel" text @click="paymentDialog = false" />
-                <Button label="Save Payment" icon="pi pi-check" @click="registerPayment" :loading="paymentLoading" />
+                <Button :label="$t('common.cancel')" text @click="paymentDialog = false" />
+                <Button :label="$t('invoices.save_payment')" icon="pi pi-check" @click="registerPayment" :loading="paymentLoading" />
             </template>
         </Dialog>
     </div>

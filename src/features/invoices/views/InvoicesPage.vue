@@ -3,8 +3,11 @@ import GenericCrud from '@/shared/components/GenericCrud.vue';
 import { useSupabaseCrud } from '@/shared/composables/useSupabaseCrud';
 import { supabase } from '@/supabase';
 import { useToast } from 'primevue/usetoast';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
+
+const { t, locale } = useI18n();
 
 // Usamos el composable conectado a la tabla 'invoices'
 const { items, loading, fetchAll, create, update, remove } = useSupabaseCrud('invoices');
@@ -27,22 +30,22 @@ const loadClients = async () => {
 };
 
 // Configuración de las columnas para la tabla
-const columns = [
-    { field: 'invoice_number', header: 'Invoice #', sortable: true, style: 'min-width: 10rem' },
-    { field: 'client_name', header: 'Client', sortable: true, style: 'min-width: 12rem' },
-    { field: 'created_at', header: 'Date', sortable: true, style: 'min-width: 10rem' },
-    { field: 'due_date', header: 'Due Date', sortable: true, style: 'min-width: 10rem' },
-    { field: 'status', header: 'Status', sortable: true, style: 'min-width: 10rem' },
-    { field: 'total', header: 'Total', sortable: true, type: 'currency', style: 'min-width: 10rem' }
-];
+const columns = computed(() => [
+    { field: 'invoice_number', header: t('invoices.invoice_number'), sortable: true, style: 'min-width: 10rem' },
+    { field: 'client_name', header: t('invoices.client'), sortable: true, style: 'min-width: 12rem' },
+    { field: 'created_at', header: t('invoices.date'), sortable: true, style: 'min-width: 10rem' },
+    { field: 'due_date', header: t('invoices.due_date'), sortable: true, style: 'min-width: 10rem' },
+    { field: 'status', header: t('invoices.status'), sortable: true, style: 'min-width: 10rem' },
+    { field: 'total', header: t('invoices.total'), sortable: true, type: 'currency', style: 'min-width: 10rem' }
+]);
 
-const statuses = ref([
-    { label: 'Sent', value: 'Sent' },
-    { label: 'Draft', value: 'Draft' },
-    { label: 'Paid', value: 'Paid' },
-    { label: 'Partial Payment', value: 'Partial Payment' },
-    { label: 'Overdue', value: 'Overdue' },
-    { label: 'Cancelled', value: 'Cancelled' }
+const statuses = computed(() => [
+    { label: t('dashboard.status.sent'), value: 'Sent' },
+    { label: t('dashboard.status.draft'), value: 'Draft' },
+    { label: t('dashboard.status.paid'), value: 'Paid' },
+    { label: t('dashboard.status.pending'), value: 'Partial Payment' },
+    { label: t('dashboard.status.overdue'), value: 'Overdue' },
+    { label: t('dashboard.status.cancelled'), value: 'Cancelled' }
 ]);
 
 const generateInvoiceNumber = () => {
@@ -53,11 +56,15 @@ const generateInvoiceNumber = () => {
 const formatDate = (value) => {
     if (!value) return '-';
     const date = new Date(value);
-    return new Intl.DateTimeFormat('es-ES', {
+    return new Intl.DateTimeFormat(locale.value === 'en' ? 'en-US' : 'es-ES', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric'
     }).format(date);
+};
+
+const formatCurrency = (value) => {
+    return (value || 0).toLocaleString(locale.value === 'en' ? 'en-US' : 'es-ES', { style: 'currency', currency: 'USD' });
 };
 
 // --- Manejo de Items de Factura ---
@@ -106,46 +113,46 @@ const handleSave = async (item) => {
         // 1. Validar Cliente
         if (!payload.client_name) {
             isValid = false;
-            errorMsg = 'Client is required';
+            errorMsg = t('invoices.validation.client_required');
         }
         
         // 2. Validar Fecha Vencimiento
         else if (!payload.due_date) {
             isValid = false;
-            errorMsg = 'Due Date is required';
+            errorMsg = t('invoices.validation.due_date_required');
         } 
         else if (new Date(payload.due_date).setHours(0,0,0,0) < new Date().setHours(0,0,0,0)) {
              isValid = false;
-             errorMsg = 'Due Date must be today or in the future';
+             errorMsg = t('invoices.validation.due_date_future');
         }
 
         // 3. Validar Items
         else if (invoiceLineItems.value.length === 0) {
             isValid = false;
-            errorMsg = 'At least one item is required';
+            errorMsg = t('invoices.validation.item_required');
         } else {
             // Validar items individuales
             for (const line of invoiceLineItems.value) {
                 if (!line.description || !line.description.trim()) {
                     isValid = false;
-                    errorMsg = 'Check item descriptions';
+                    errorMsg = t('invoices.validation.check_descriptions');
                     break;
                 }
                 if (!line.quantity || line.quantity <= 0) {
                     isValid = false;
-                    errorMsg = 'Quantity must be > 0';
+                    errorMsg = t('invoices.validation.qty_positive');
                     break;
                 }
                 if (line.unit_price === null || line.unit_price <= 0) {
                     isValid = false;
-                    errorMsg = 'Price must be greater than 0';
+                    errorMsg = t('invoices.validation.price_positive');
                     break;
                 }
             }
         }
 
         if (!isValid) {
-             toast.add({ severity: 'error', summary: 'Validation Error', detail: errorMsg, life: 3000 });
+             toast.add({ severity: 'error', summary: t('common.error'), detail: errorMsg, life: 3000 });
              return; // Detenemos aquí. El dialogo NO se cierra porque _closeDialog no se llama.
         }
         
@@ -164,14 +171,14 @@ const handleSave = async (item) => {
 
         if (invoiceId) {
             await update(invoiceId, payload);
-            toast.add({ severity: 'success', summary: 'Successful', detail: 'Invoice Updated', life: 3000 });
+            toast.add({ severity: 'success', summary: t('common.successful'), detail: t('invoices.updated'), life: 3000 });
         } else {
             if (!payload.invoice_number) payload.invoice_number = generateInvoiceNumber();
             
             const newInvoice = await create(payload);
             invoiceId = newInvoice.id;
             
-            toast.add({ severity: 'success', summary: 'Successful', detail: 'Invoice Created', life: 3000 });
+            toast.add({ severity: 'success', summary: t('common.successful'), detail: t('invoices.created'), life: 3000 });
         }
 
         // Guardar Items
@@ -196,16 +203,16 @@ const handleSave = async (item) => {
 
     } catch (e) {
         console.error(e);
-        toast.add({ severity: 'error', summary: 'Error', detail: 'Operation failed', life: 3000 });
+        toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.operation_failed'), life: 3000 });
     }
 };
 
 const handleDelete = async (item) => {
     try {
         await remove(item.id);
-        toast.add({ severity: 'success', summary: 'Successful', detail: 'Invoice Deleted', life: 3000 });
+        toast.add({ severity: 'success', summary: t('common.successful'), detail: t('invoices.deleted'), life: 3000 });
     } catch (e) {
-        toast.add({ severity: 'error', summary: 'Error', detail: 'Delete failed', life: 3000 });
+        toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.delete_failed'), life: 3000 });
     }
 };
 
@@ -214,9 +221,9 @@ const handleDeleteSelected = async (selectedItems) => {
         for (const item of selectedItems) {
             await remove(item.id);
         }
-        toast.add({ severity: 'success', summary: 'Successful', detail: 'Invoices Deleted', life: 3000 });
+        toast.add({ severity: 'success', summary: t('common.successful'), detail: t('invoices.batch_deleted'), life: 3000 });
     } catch (e) {
-        toast.add({ severity: 'error', summary: 'Error', detail: 'Batch delete failed', life: 3000 });
+        toast.add({ severity: 'error', summary: t('common.error'), detail: t('common.batch_delete_failed'), life: 3000 });
     }
 };
 
@@ -234,8 +241,8 @@ const getStatusSeverity = (status) => {
 
 <template>
     <GenericCrud
-        title="Manage Invoices"
-        entityName="Invoice"
+        :title="$t('invoices.title')"
+        :entityName="$t('invoices.entityName')"
         displayField="invoice_number"
         :items="items"
         :loading="loading"
@@ -248,7 +255,7 @@ const getStatusSeverity = (status) => {
     >
         <!-- Custom Status Badge -->
         <template #col-status="{ data }">
-             <Tag :value="data.status" :severity="getStatusSeverity(data.status)" rounded />
+             <Tag :value="$t(`dashboard.status.${data.status.toLowerCase().replace(' ', '_')}`)" :severity="getStatusSeverity(data.status)" rounded />
         </template>
 
         <!-- Botón de detalle -->
@@ -266,58 +273,58 @@ const getStatusSeverity = (status) => {
         <!-- Formulario personalizado -->
         <template #form="{ item, submitted }">
              <div v-if="item.id">
-                <label class="block font-bold mb-3">Invoice Number</label>
+                <label class="block font-bold mb-3">{{ $t('invoices.invoice_number') }}</label>
                 <InputText v-model="item.invoice_number" disabled fluid class="bg-surface-100" />
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Cliente Select -->
                 <div>
-                     <label for="client_name" class="block font-bold mb-3">Client</label>
-                     <Select id="client_name" v-model="item.client_name" :options="clients" optionLabel="name" placeholder="Select Client" filter fluid :invalid="submitted && !item.client_name" />
-                     <small v-if="submitted && !item.client_name" class="text-red-500">Client is required.</small>
+                     <label for="client_name" class="block font-bold mb-3">{{ $t('invoices.client') }}</label>
+                     <Select id="client_name" v-model="item.client_name" :options="clients" optionLabel="name" :placeholder="$t('invoices.client')" filter fluid :invalid="submitted && !item.client_name" />
+                     <small v-if="submitted && !item.client_name" class="text-red-500">{{ $t('invoices.validation.client_required') }}</small>
                 </div>
 
                  <div>
-                     <label for="due_date" class="block font-bold mb-3">Due Date</label>
+                     <label for="due_date" class="block font-bold mb-3">{{ $t('invoices.due_date') }}</label>
                      <DatePicker id="due_date" v-model="item.due_date" showIcon fluid :showOnFocus="false" :invalid="submitted && (!item.due_date || new Date(item.due_date).setHours(0,0,0,0) < new Date().setHours(0,0,0,0))" />
-                     <small v-if="submitted && !item.due_date" class="text-red-500 block">Due Date is required.</small>
-                     <small v-else-if="submitted && new Date(item.due_date).setHours(0,0,0,0) < new Date().setHours(0,0,0,0)" class="text-red-500 block">Date cannot be in the past.</small>
+                     <small v-if="submitted && !item.due_date" class="text-red-500 block">{{ $t('invoices.validation.due_date_required') }}</small>
+                     <small v-else-if="submitted && new Date(item.due_date).setHours(0,0,0,0) < new Date().setHours(0,0,0,0)" class="text-red-500 block">{{ $t('invoices.validation.due_date_future') }}</small>
                 </div>
             </div>
 
             <!-- Items Section -->
              <div class="border rounded-lg p-4 mt-2 surface-ground" :class="{'border-red-500': formSubmitted && invoiceLineItems.length === 0}">
                 <div class="flex justify-between items-center mb-3">
-                    <span class="font-bold">Items</span>
-                    <Button icon="pi pi-plus" size="small" label="Add Item" outlined @click="addLineItem" />
+                    <span class="font-bold">{{ $t('invoices.items') }}</span>
+                    <Button icon="pi pi-plus" size="small" :label="$t('invoices.add_item')" outlined @click="addLineItem" />
                 </div>
                 
                 <div v-if="invoiceLineItems.length === 0" class="text-center text-sm text-surface-500 py-2">
-                    <span v-if="formSubmitted" class="text-red-500 font-bold">At least one item is required.</span>
-                    <span v-else>No items added yet.</span>
+                    <span v-if="formSubmitted" class="text-red-500 font-bold">{{ $t('invoices.validation.item_required') }}</span>
+                    <span v-else>{{ $t('invoices.no_items') }}</span>
                 </div>
 
                 <div v-else class="flex flex-col gap-3">
                     <div v-for="(line, index) in invoiceLineItems" :key="index" class="grid grid-cols-12 gap-2 items-end pb-3 border-b border-surface-200">
                         <div class="col-span-5">
-                            <label class="text-xs mb-1 block" v-if="index===0">Description</label>
-                            <InputText v-model="line.description" placeholder="Product/Service" fluid size="small" :invalid="formSubmitted && !line.description" />
-                            <small v-if="formSubmitted && !line.description" class="text-red-500 text-xs">Description required</small>
+                            <label class="text-xs mb-1 block" v-if="index===0">{{ $t('invoices.description') }}</label>
+                            <InputText v-model="line.description" :placeholder="$t('invoices.description')" fluid size="small" :invalid="formSubmitted && !line.description" />
+                            <small v-if="formSubmitted && !line.description" class="text-red-500 text-xs">{{ $t('invoices.validation.check_descriptions') }}</small>
                         </div>
                         <div class="col-span-2">
-                             <label class="text-xs mb-1 block" v-if="index===0">Qty</label>
+                             <label class="text-xs mb-1 block" v-if="index===0">{{ $t('invoices.qty') }}</label>
                             <InputNumber v-model="line.quantity" size="small" fluid @input="(e) => { line.quantity = e.value; updateLineTotal(line); calculateInvoiceTotal(item); }" :invalid="formSubmitted && (!line.quantity || line.quantity <= 0)" />
-                            <small v-if="formSubmitted && (!line.quantity || line.quantity <= 0)" class="text-red-500 text-xs">Qty > 0</small>
+                            <small v-if="formSubmitted && (!line.quantity || line.quantity <= 0)" class="text-red-500 text-xs">{{ $t('invoices.validation.qty_positive') }}</small>
                         </div>
                         <div class="col-span-2">
-                             <label class="text-xs mb-1 block" v-if="index===0">Price</label>
-                            <InputNumber v-model="line.unit_price" mode="currency" currency="USD" locale="en-US" size="small" fluid @input="(e) => { line.unit_price = e.value; updateLineTotal(line); calculateInvoiceTotal(item); }" :invalid="formSubmitted && (line.unit_price === null || line.unit_price <= 0)" />
-                            <small v-if="formSubmitted && (line.unit_price === null || line.unit_price <= 0)" class="text-red-500 text-xs text-nowrap block">Price > 0</small>
+                             <label class="text-xs mb-1 block" v-if="index===0">{{ $t('invoices.price') }}</label>
+                            <InputNumber v-model="line.unit_price" mode="currency" currency="USD" :locale="locale === 'en' ? 'en-US' : 'es-ES'" size="small" fluid @input="(e) => { line.unit_price = e.value; updateLineTotal(line); calculateInvoiceTotal(item); }" :invalid="formSubmitted && (line.unit_price === null || line.unit_price <= 0)" />
+                            <small v-if="formSubmitted && (line.unit_price === null || line.unit_price <= 0)" class="text-red-500 text-xs text-nowrap block">{{ $t('invoices.validation.price_positive') }}</small>
                         </div>
                         <div class="col-span-2">
-                             <label class="text-xs mb-1 block" v-if="index===0">Total</label>
-                            <span class="block py-2 font-bold text-right">{{ (line.total || 0).toLocaleString('en-US', {style:'currency', currency:'USD'}) }}</span>
+                             <label class="text-xs mb-1 block" v-if="index===0">{{ $t('invoices.total') }}</label>
+                            <span class="block py-2 font-bold text-right">{{ formatCurrency(line.total) }}</span>
                         </div>
                         <div class="col-span-1 flex justify-end">
                             <Button icon="pi pi-trash" text severity="danger" @click="() => { removeLineItem(index); calculateInvoiceTotal(item); }" />
@@ -328,20 +335,20 @@ const getStatusSeverity = (status) => {
 
             <div class="flex justify-end mt-2">
                 <div class="text-right">
-                    <span class="block text-surface-500 text-sm">Grand Total</span>
-                    <span class="block text-2xl font-bold text-primary">{{ (item.total || 0).toLocaleString('en-US', {style:'currency', currency:'USD'}) }}</span>
+                    <span class="block text-surface-500 text-sm">{{ $t('invoices.grand_total') }}</span>
+                    <span class="block text-2xl font-bold text-primary">{{ formatCurrency(item.total) }}</span>
                 </div>
             </div>
             
            
             <div class="mt-4">
-                <label for="status" class="block font-bold mb-3">Save As</label>
+                <label for="status" class="block font-bold mb-3">{{ $t('invoices.save_as') }}</label>
                 <div class="flex gap-4">
                      <RadioButton v-model="item.status" inputId="statusSent" name="status" value="Sent" />
-                    <label for="statusSent" class="cursor-pointer">Send Immediately (Default)</label>
+                    <label for="statusSent" class="cursor-pointer">{{ $t('invoices.send_immediately') }}</label>
 
                     <RadioButton v-model="item.status" inputId="statusDraft" name="status" value="Draft" />
-                    <label for="statusDraft" class="cursor-pointer">Save as Draft</label>
+                    <label for="statusDraft" class="cursor-pointer">{{ $t('invoices.save_as_draft') }}</label>
                 </div>
             </div>
         </template>
