@@ -159,5 +159,25 @@
             "qty_positive": "La cantidad debe ser > 0",
             "price_positive": "El precio debe ser mayor a 0"
         }
+    },
+    "payments": {
+        "title": "Pagos",
+        "total_revenue": "Ingresos Totales",
+        "all_time": "Desde el inicio",
+        "received_payments": "pagos recibidos",
+        "transactions": "Transacciones",
+        "synced": "Sincronizado",
+        "with_supabase": "con Supabase",
+        "history": "Historial de Pagos",
+        "search_placeholder": "Buscar Cliente o Factura",
+        "method_placeholder": "Método",
+        "tooltip_cancelled": "La factura fue Cancelada ({number})",
+        "load_error": "No se pudieron cargar los pagos",
+        "status": {
+            "completed": "Completado",
+            "pending": "Pendiente",
+            "failed": "Fallido",
+            "refunded": "Reembolsado"
+        }
     }
 }

@@ -159,5 +159,25 @@
             "qty_positive": "Quantity must be > 0",
             "price_positive": "Price must be greater than 0"
         }
+    },
+    "payments": {
+        "title": "Payments",
+        "total_revenue": "Total Revenue",
+        "all_time": "All time",
+        "received_payments": "received payments",
+        "transactions": "Transactions",
+        "synced": "Synced",
+        "with_supabase": "with Supabase",
+        "history": "Payment History",
+        "search_placeholder": "Search Client or Invoice",
+        "method_placeholder": "Method",
+        "tooltip_cancelled": "Invoice was Cancelled ({number})",
+        "load_error": "Could not load payments",
+        "status": {
+            "completed": "Completed",
+            "pending": "Pending",
+            "failed": "Failed",
+            "refunded": "Refunded"
+        }
     }
 }
