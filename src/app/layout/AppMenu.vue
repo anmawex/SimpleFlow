@@ -128,55 +128,55 @@ const model = ref([
     //         }
     //     ]
     // },
-    {
-        label: 'Pages',
-        icon: 'pi pi-fw pi-briefcase',
-        path: '/pages',
-        items: [
-            {
-                label: 'Landing',
-                icon: 'pi pi-fw pi-globe',
-                to: '/'
-            },
-            {
-                label: 'Auth',
-                icon: 'pi pi-fw pi-user',
-                path: '/auth',
-                items: [
-                    {
-                        label: 'Login',
-                        icon: 'pi pi-fw pi-sign-in',
-                        to: '/login'
-                    },
-                    {
-                        label: 'Error',
-                        icon: 'pi pi-fw pi-times-circle',
-                        to: '/auth/error'
-                    },
-                    {
-                        label: 'Access Denied',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/auth/access'
-                    }
-                ]
-            },
-            {
-                label: 'Crud',
-                icon: 'pi pi-fw pi-pencil',
-                to: '/pages/crud'
-            },
-            {
-                label: 'Not Found',
-                icon: 'pi pi-fw pi-exclamation-circle',
-                to: '/pages/notfound'
-            },
-            {
-                label: 'Empty',
-                icon: 'pi pi-fw pi-circle-off',
-                to: '/pages/empty'
-            }
-        ]
-    },
+    // {
+    //     label: 'Pages',
+    //     icon: 'pi pi-fw pi-briefcase',
+    //     path: '/pages',
+    //     items: [
+    //         {
+    //             label: 'Landing',
+    //             icon: 'pi pi-fw pi-globe',
+    //             to: '/'
+    //         },
+    //         {
+    //             label: 'Auth',
+    //             icon: 'pi pi-fw pi-user',
+    //             path: '/auth',
+    //             items: [
+    //                 {
+    //                     label: 'Login',
+    //                     icon: 'pi pi-fw pi-sign-in',
+    //                     to: '/login'
+    //                 },
+    //                 {
+    //                     label: 'Error',
+    //                     icon: 'pi pi-fw pi-times-circle',
+    //                     to: '/auth/error'
+    //                 },
+    //                 {
+    //                     label: 'Access Denied',
+    //                     icon: 'pi pi-fw pi-lock',
+    //                     to: '/auth/access'
+    //                 }
+    //             ]
+    //         },
+    //         {
+    //             label: 'Crud',
+    //             icon: 'pi pi-fw pi-pencil',
+    //             to: '/pages/crud'
+    //         },
+    //         {
+    //             label: 'Not Found',
+    //             icon: 'pi pi-fw pi-exclamation-circle',
+    //             to: '/pages/notfound'
+    //         },
+    //         {
+    //             label: 'Empty',
+    //             icon: 'pi pi-fw pi-circle-off',
+    //             to: '/pages/empty'
+    //         }
+    //     ]
+    // },
     /* {
         label: 'Hierarchy',
         icon: 'pi pi-fw pi-align-left',
@@ -263,12 +263,12 @@ const model = ref([
                 icon: 'pi pi-fw pi-book',
                 to: '/start/documentation'
             },
-            {
-                label: 'View Source',
-                icon: 'pi pi-fw pi-github',
-                url: 'https://github.com/primefaces/sakai-vue',
-                target: '_blank'
-            }
+            // {
+            //     label: 'View Source',
+            //     icon: 'pi pi-fw pi-github',
+            //     url: 'https://github.com/primefaces/sakai-vue',
+            //     target: '_blank'
+            // }
         ]
     }
 ]);

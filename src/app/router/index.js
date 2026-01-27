@@ -121,14 +121,14 @@ const router = createRouter({
                     name: 'timeline',
                     component: () => import('@/shared/uikit/TimelineDoc.vue')
                 }, */
-                {
-                    path: '/blocks/free',
-                    name: 'blocks',
-                    meta: {
-                        breadcrumb: ['Prime Blocks', 'Free Blocks']
-                    },
-                    component: () => import('@/shared/utilities/Blocks.vue')
-                },
+                // {
+                //     path: '/blocks/free',
+                //     name: 'blocks',
+                //     meta: {
+                //         breadcrumb: ['Prime Blocks', 'Free Blocks']
+                //     },
+                //     component: () => import('@/shared/utilities/Blocks.vue')
+                // },
                 // {
                 //     path: '/pages/empty',
                 //     name: 'empty',
