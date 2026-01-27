@@ -6,9 +6,9 @@ const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
-            path: '/',
+            path: '/login',
             name: 'login',
-            component: () => import('@/features/auth/pages/Login.vue')
+            component: () => import('@/app/pages/Login.vue')
         },
         {
             path: '/dashboard', // Nuevo prefijo para las rutas de la aplicación
@@ -129,16 +129,16 @@ const router = createRouter({
                     },
                     component: () => import('@/shared/utilities/Blocks.vue')
                 },
-                {
-                    path: '/pages/empty',
-                    name: 'empty',
-                    component: () => import('@/app/layout/EmptyLayout.vue')
-                },
-                {
-                    path: '/pages/crud',
-                    name: 'crud',
-                    component: () => import('@/features/examples/pages/Crud.vue')
-                },
+                // {
+                //     path: '/pages/empty',
+                //     name: 'empty',
+                //     component: () => import('@/app/layout/EmptyLayout.vue')
+                // },
+                // {
+                //     path: '/pages/crud',
+                //     name: 'crud',
+                //     component: () => import('@/features/examples/pages/Crud.vue')
+                // },
                 {
                     path: '/start/documentation',
                     name: 'documentation',
@@ -147,9 +147,9 @@ const router = createRouter({
             ]
         },
         {
-            path: '/landing',
+            path: '/',
             name: 'landing',
-            component: () => import('@/features/home/pages/Landing.vue')
+            component: () => import('@/app/pages/Landing.vue')
         },
         {
             path: '/pages/notfound',

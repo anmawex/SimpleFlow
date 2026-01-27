@@ -136,7 +136,7 @@ const model = ref([
             {
                 label: 'Landing',
                 icon: 'pi pi-fw pi-globe',
-                to: '/landing'
+                to: '/'
             },
             {
                 label: 'Auth',
@@ -146,7 +146,7 @@ const model = ref([
                     {
                         label: 'Login',
                         icon: 'pi pi-fw pi-sign-in',
-                        to: '/auth/login'
+                        to: '/login'
                     },
                     {
                         label: 'Error',
