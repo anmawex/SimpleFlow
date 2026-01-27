@@ -69,7 +69,7 @@
   />
 </svg>
 
-                    <h4 class="font-medium text-3xl text-surface-900 dark:text-surface-0">SAKAI</h4>
+                    <h4 class="font-medium text-3xl text-surface-900 dark:text-surface-0">SEIKYU</h4>
                 </a>
             </div>
 

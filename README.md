@@ -1,6 +1,6 @@
 # SEIKYU
 
-SEIKYU is a Vue 3 application with Supabase authentication, built on top of the Sakai template using PrimeVue components.
+SEIKYU is a Vue 3 application with Supabase authentication, built on top of the SEIKYU template using PrimeVue components.
 
 ## 🚀 Quick Start
 
@@ -107,7 +107,7 @@ src/
 
 ## 📚 Documentation
 
-For more information about the template, visit the [Sakai documentation](https://sakai.primevue.org/documentation).
+For more information about the template, visit the [SEIKYU documentation](https://SEIKYU.primevue.org/documentation).
 
 ## 📄 License
 
