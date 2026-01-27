@@ -184,5 +184,47 @@
         "text": "SEIKYU © 2026",
         "by": "Made with ❤️ by",
         "rights": "All rights reserved."
+    },
+    "docs": {
+        "title": "SEIKYU Project",
+        "subtitle": "A modern, efficient financial management system built with <b>Vue 3</b>, <b>PrimeVue</b>, and <b>Supabase</b>. Designed for speed, scalability, and clean code.",
+        "functional_core": "Functional Core",
+        "developer_guide": "Developer Guide: The Pattern",
+        "pattern_description": "SEIKYU uses a <b>Composable + Generic Component</b> pattern to minimize code duplication.",
+        "steps_example": "// Example of creating a new Entity page in 3 steps",
+        "core_components": "Core Components",
+        "stack_tech": "Stack Tech",
+        "pro_tip": "Pro Tip",
+        "rls_tip": "Always check <b>Supabase RLS policies</b> when adding new tables to ensure the Auth Store can access the data securely.",
+        "features": {
+            "auth": {
+                "title": "Authentication",
+                "desc": "Secure login and logout using Supabase Auth. Session persistence with LocalStorage and real-time state sync with Pinia."
+            },
+            "dashboard": {
+                "title": "Dashboard",
+                "desc": "Centralized overview of business metrics including Total Receivable, Monthly Collections, and Client Engagement."
+            },
+            "crm": {
+                "title": "Client CRM",
+                "desc": "Full CRUD management for clients. Track contact details, status, and associated financial history."
+            },
+            "invoicing": {
+                "title": "Invoicing System",
+                "desc": "Generate and manage invoices. Track statuses from Draft to Paid or Overdue. Real-time balance calculations."
+            },
+            "payments": {
+                "title": "Payment Tracking",
+                "desc": "Record payments against invoices. Support for partial payments and full transaction history."
+            }
+        },
+        "status": {
+            "operational": "Operational"
+        },
+        "architecture": {
+            "generic": "A high-level reusable component that handles tables, dialogs, and forms for any entity. Reduces boilerplate by 70%.",
+            "composable": "Dynamic composable that provides standard CRUD actions (fetch, create, update, delete) for any Supabase table.",
+            "pinia": "Single source of truth for user data and session status. Automatically reacts to Supabase auth events."
+        }
     }
 }

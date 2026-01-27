@@ -184,5 +184,47 @@
         "text": "SEIKYU © 2026",
         "by": "Hecho con ❤️ por",
         "rights": "Todos los derechos reservados."
+    },
+    "docs": {
+        "title": "Proyecto SEIKYU",
+        "subtitle": "Un sistema de gestión financiera moderno y eficiente construido con <b>Vue 3</b>, <b>PrimeVue</b> y <b>Supabase</b>. Diseñado para ofrecer velocidad, escalabilidad y código limpio.",
+        "functional_core": "Núcleo Funcional",
+        "developer_guide": "Guía del Desarrollador: El Patrón",
+        "pattern_description": "SEIKYU utiliza un patrón de <b>Composable + Componente Genérico</b> para minimizar la duplicación de código.",
+        "steps_example": "// Ejemplo de creación de una nueva página de Entidad en 3 pasos",
+        "core_components": "Componentes Core",
+        "stack_tech": "Stack Tecnológico",
+        "pro_tip": "Consejo Pro",
+        "rls_tip": "Siempre revisa las <b>políticas RLS de Supabase</b> al agregar nuevas tablas para asegurar que el Auth Store pueda acceder a los datos de forma segura.",
+        "features": {
+            "auth": {
+                "title": "Autenticación",
+                "desc": "Inicio y cierre de sesión seguro mediante Supabase Auth. Persistencia de sesión con LocalStorage y sincronización de estado en tiempo real con Pinia."
+            },
+            "dashboard": {
+                "title": "Tablero de Control",
+                "desc": "Vista general centralizada de métricas de negocio incluyendo Total por Cobrar, Recaudación Mensual y Participación de Clientes."
+            },
+            "crm": {
+                "title": "CRM de Clientes",
+                "desc": "Gestión CRUD completa para clientes. Seguimiento de detalles de contacto, estado e historial financiero asociado."
+            },
+            "invoicing": {
+                "title": "Sistema de Facturación",
+                "desc": "Generación y gestión de facturas. Seguimiento de estados desde Borrador hasta Pagado o Vencido. Cálculos de saldo en tiempo real."
+            },
+            "payments": {
+                "title": "Seguimiento de Pagos",
+                "desc": "Registro de pagos contra facturas. Soporte para pagos parciales e historial completo de transacciones."
+            }
+        },
+        "status": {
+            "operational": "Operativo"
+        },
+        "architecture": {
+            "generic": "Un componente reutilizable de alto nivel que gestiona tablas, diálogos y formularios para cualquier entidad. Reduce el código repetitivo en un 70%.",
+            "composable": "Composable dinámico que proporciona acciones CRUD estándar (obtener, crear, actualizar, eliminar) para cualquier tabla de Supabase.",
+            "pinia": "Fuente única de verdad para los datos del usuario y el estado de la sesión. Reacciona automáticamente a los eventos de autenticación de Supabase."
+        }
     }
 }

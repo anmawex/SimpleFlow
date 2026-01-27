@@ -1,58 +1,61 @@
 <script setup>
-import { ref } from 'vue';
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
-const features = ref([
+const { t } = useI18n();
+
+const features = computed(() => [
     {
-        title: 'Authentication',
+        title: t('docs.features.auth.title'),
         icon: 'pi pi-lock',
         color: 'blue',
-        description: 'Secure login and logout using Supabase Auth. Session persistence with LocalStorage and real-time state sync with Pinia.',
-        status: 'Operational'
+        description: t('docs.features.auth.desc'),
+        status: t('docs.status.operational')
     },
     {
-        title: 'Dashboard',
+        title: t('docs.features.dashboard.title'),
         icon: 'pi pi-chart-bar',
         color: 'purple',
-        description: 'Centralized overview of business metrics including Total Receivable, Monthly Collections, and Client Engagement.',
-        status: 'Operational'
+        description: t('docs.features.dashboard.desc'),
+        status: t('docs.status.operational')
     },
     {
-        title: 'Client CRM',
+        title: t('docs.features.crm.title'),
         icon: 'pi pi-users',
         color: 'cyan',
-        description: 'Full CRUD management for clients. Track contact details, status, and associated financial history.',
-        status: 'Operational'
+        description: t('docs.features.crm.desc'),
+        status: t('docs.status.operational')
     },
     {
-        title: 'Invoicing System',
+        title: t('docs.features.invoicing.title'),
         icon: 'pi pi-file-pdf',
         color: 'orange',
-        description: 'Generate and manage invoices. Track statuses from Draft to Paid or Overdue. Real-time balance calculations.',
-        status: 'Operational'
+        description: t('docs.features.invoicing.desc'),
+        status: t('docs.status.operational')
     },
     {
-        title: 'Payment Tracking',
+        title: t('docs.features.payments.title'),
         icon: 'pi pi-money-bill',
         color: 'green',
-        description: 'Record payments against invoices. Support for partial payments and full transaction history.',
-        status: 'Operational'
+        description: t('docs.features.payments.desc'),
+        status: t('docs.status.operational')
     }
 ]);
 
-const architecture = ref([
+const architecture = computed(() => [
     {
         label: 'GenericCrud.vue',
-        detail: 'A high-level reusable component that handles tables, dialogs, and forms for any entity. Reduces boilerplate by 70%.',
+        detail: t('docs.architecture.generic'),
         icon: 'pi pi-box'
     },
     {
         label: 'useSupabaseCrud.js',
-        detail: 'Dynamic composable that provides standard CRUD actions (fetch, create, update, delete) for any Supabase table.',
+        detail: t('docs.architecture.composable'),
         icon: 'pi pi-database'
     },
     {
         label: 'Auth Store (Pinia)',
-        detail: 'Single source of truth for user data and session status. Automatically reacts to Supabase auth events.',
+        detail: t('docs.architecture.pinia'),
         icon: 'pi pi-shield'
     }
 ]);
@@ -64,11 +67,8 @@ const architecture = ref([
         <div class="relative p-8 mb-8 bg-gradient-to-r from-primary-500 to-primary-700 rounded-2xl text-white">
             <div class="flex flex-col md:flex-row justify-between items-center gap-6">
                 <div>
-                    <h1 class="text-4xl font-bold mb-2">SEIKYU Project</h1>
-                    <p class="text-lg opacity-90 max-w-2xl">
-                        A modern, efficient financial management system built with <b>Vue 3</b>, <b>PrimeVue</b>, and <b>Supabase</b>. 
-                        Designed for speed, scalability, and clean code.
-                    </p>
+                    <h1 class="text-4xl font-bold mb-2">{{ $t('docs.title') }}</h1>
+                    <p class="text-lg opacity-90 max-w-2xl" v-html="$t('docs.subtitle')"></p>
                 </div>
                 <div class="hidden md:block">
                     <i class="pi pi-directions text-8xl opacity-20"></i>
@@ -81,7 +81,7 @@ const architecture = ref([
             <div class="col-span-12 lg:col-span-8">
                 <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
                     <i class="pi pi-th-large text-primary"></i>
-                    Functional Core
+                    {{ $t('docs.functional_core') }}
                 </h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div v-for="f in features" :key="f.title" class="p-4 border border-surface-200 dark:border-surface-700 rounded-xl hover:shadow-md transition-shadow">
@@ -105,12 +105,12 @@ const architecture = ref([
                 <div class="mt-12">
                     <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
                         <i class="pi pi-code text-primary"></i>
-                        Developer Guide: The Pattern
+                        {{ $t('docs.developer_guide') }}
                     </h2>
                     <div class="card bg-surface-50 dark:bg-surface-800/50 border-none">
-                        <p class="mb-4">SEIKYU uses a <b>Composable + Generic Component</b> pattern to minimize code duplication.</p>
+                        <p class="mb-4" v-html="$t('docs.pattern_description')"></p>
                         <pre class="app-code bg-surface-950 text-surface-0 p-4 rounded-lg overflow-x-auto text-sm">
-<code>// Example of creating a new Entity page in 3 steps
+<code>// {{ $t('docs.steps_example') }}
 const { items, fetchAll } = useSupabaseCrud('my_table');
 onMounted(fetchAll);
 
@@ -130,7 +130,7 @@ onMounted(fetchAll);
             <!-- Technical Stack & Sidebar -->
             <div class="col-span-12 lg:col-span-4">
                 <div class="sticky top-8">
-                    <h3 class="text-xl font-bold mb-4">Core Components</h3>
+                    <h3 class="text-xl font-bold mb-4">{{ $t('docs.core_components') }}</h3>
                     <div class="flex flex-col gap-4 mb-8">
                         <div v-for="item in architecture" :key="item.label" class="flex gap-4 p-4 bg-surface-50 dark:bg-surface-800/30 rounded-xl">
                             <i :class="[item.icon, 'text-primary text-xl mt-1']"></i>
@@ -141,7 +141,7 @@ onMounted(fetchAll);
                         </div>
                     </div>
 
-                    <h3 class="text-xl font-bold mb-4">Stack Tech</h3>
+                    <h3 class="text-xl font-bold mb-4">{{ $t('docs.stack_tech') }}</h3>
                     <ul class="list-none p-0 m-0">
                         <li class="flex items-center gap-3 p-3 border-b border-surface-200 dark:border-surface-700">
                             <img src="https://vuejs.org/logo.svg" width="20" height="20" alt="Vue" />
@@ -164,11 +164,9 @@ onMounted(fetchAll);
                     <div class="mt-8 p-6 bg-primary-50 dark:bg-primary-900/10 rounded-2xl border border-primary-100 dark:border-primary-800">
                         <div class="flex items-center gap-2 mb-2">
                              <i class="pi pi-info-circle text-primary"></i>
-                             <span class="font-bold">Pro Tip</span>
+                             <span class="font-bold">{{ $t('docs.pro_tip') }}</span>
                         </div>
-                        <p class="text-sm text-surface-600 dark:text-surface-400">
-                            Always check <b>Supabase RLS policies</b> when adding new tables to ensure the Auth Store can access the data securely.
-                        </p>
+                        <p class="text-sm text-surface-600 dark:text-surface-400" v-html="$t('docs.rls_tip')"></p>
                     </div>
                 </div>
             </div>
