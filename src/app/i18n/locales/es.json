@@ -22,5 +22,25 @@
         "logoutConfirmHeader": "Confirmar Cierre de Sesión",
         "cancel": "Cancelar",
         "user": "Usuario"
+    },
+    "dashboard": {
+        "totalReceivable": "Total por Cobrar",
+        "outstandingBalance": "Saldo pendiente",
+        "collectedThisMonth": "Cobrado Este Mes",
+        "syncedWithPayments": "Sincronizado con pagos",
+        "activeClients": "Clientes Activos",
+        "engagementRate": "Tasa de Compromiso",
+        "pendingInvoices": "Facturas Pendientes",
+        "actionNeeded": "Acción Requerida",
+        "immediately": "de inmediato",
+        "statusDistribution": "Distribución de Estados de Factura",
+        "paidVsPending": "Pagado vs Pendiente",
+        "status": {
+            "paid": "Pagado",
+            "pending": "Pendiente",
+            "overdue": "Vencido",
+            "draft": "Borrador",
+            "cancelled": "Cancelado"
+        }
     }
 }

@@ -22,5 +22,25 @@
         "logoutConfirmHeader": "Confirm Log Out",
         "cancel": "Cancel",
         "user": "User"
+    },
+    "dashboard": {
+        "totalReceivable": "Total Receivable",
+        "outstandingBalance": "Outstanding balance",
+        "collectedThisMonth": "Collected This Month",
+        "syncedWithPayments": "Synced with payments",
+        "activeClients": "Active Clients",
+        "engagementRate": "Engagement Rate",
+        "pendingInvoices": "Pending Invoices",
+        "actionNeeded": "Action Needed",
+        "immediately": "immediately",
+        "statusDistribution": "Invoice Status Distribution",
+        "paidVsPending": "Paid vs Pending",
+        "status": {
+            "paid": "Paid",
+            "pending": "Pending",
+            "overdue": "Overdue",
+            "draft": "Draft",
+            "cancelled": "Cancelled"
+        }
     }
 }

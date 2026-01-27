@@ -2,6 +2,9 @@
 import { useLayout } from '@/app/layout/composables/layout';
 import { supabase } from '@/supabase';
 import { onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t, locale } = useI18n();
 
 const { getPrimary, getSurface, isDarkTheme } = useLayout();
 
@@ -28,8 +31,8 @@ onMounted(async () => {
     loading.value = false;
 });
 
-// React to theme changes for charts
-watch([getPrimary, getSurface, isDarkTheme], () => {
+// React to theme or locale changes for charts
+watch([getPrimary, getSurface, isDarkTheme, locale], () => {
     initCharts();
 });
 
@@ -104,7 +107,13 @@ const initCharts = () => {
     
     // Bar Chart: Invoice Status
     chartData.value = {
-        labels: ['Paid', 'Pending', 'Overdue', 'Draft', 'Cancelled'],
+        labels: [
+            t('dashboard.status.paid'), 
+            t('dashboard.status.pending'), 
+            t('dashboard.status.overdue'), 
+            t('dashboard.status.draft'), 
+            t('dashboard.status.cancelled')
+        ],
         datasets: [
             {
                 label: 'Invoices',
@@ -148,7 +157,7 @@ const initCharts = () => {
 
     // Doughnut: Paid vs Pending (Simple Ratio)
     pieData.value = {
-        labels: ['Paid', 'Pending', 'Overdue'],
+        labels: [t('dashboard.status.paid'), t('dashboard.status.pending'), t('dashboard.status.overdue')],
         datasets: [
             {
                 data: [
@@ -180,7 +189,7 @@ const initCharts = () => {
     };
 };
 
-const formatCurrency = (val) => (val || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+const formatCurrency = (val) => (val || 0).toLocaleString(locale.value === 'en' ? 'en-US' : 'es-ES', { style: 'currency', currency: 'USD' });
 
 </script>
 
@@ -192,7 +201,7 @@ const formatCurrency = (val) => (val || 0).toLocaleString('en-US', { style: 'cur
             <div class="card mb-0 h-full flex flex-col shadow-sm border border-surface-200 dark:border-surface-700">
                 <div class="flex justify-between mb-4">
                     <div>
-                        <span class="block text-surface-500 dark:text-surface-400 font-medium mb-4">Total Receivable</span>
+                        <span class="text-surface-500 dark:text-surface-400 font-medium mb-4 block">{{ $t('dashboard.totalReceivable') }}</span>
                         <div class="text-surface-900 dark:text-surface-0 font-bold text-3xl">{{ formatCurrency(totalReceivable) }}</div>
                     </div>
                     <div class="flex items-center justify-center bg-orange-100 dark:bg-orange-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
@@ -200,8 +209,8 @@ const formatCurrency = (val) => (val || 0).toLocaleString('en-US', { style: 'cur
                     </div>
                 </div>
                 <div class="mt-auto">
-                    <span class="text-orange-500 font-medium">Outstanding </span>
-                    <span class="text-surface-500 dark:text-surface-400">balance</span>
+                    <span class="text-orange-500 font-medium">{{ $t('dashboard.outstandingBalance').split(' ')[0] }} </span>
+                    <span class="text-surface-500 dark:text-surface-400">{{ $t('dashboard.outstandingBalance').split(' ').slice(1).join(' ') }}</span>
                 </div>
             </div>
         </div>
@@ -211,7 +220,7 @@ const formatCurrency = (val) => (val || 0).toLocaleString('en-US', { style: 'cur
             <div class="card mb-0 h-full flex flex-col shadow-sm border border-surface-200 dark:border-surface-700">
                 <div class="flex justify-between mb-4">
                     <div>
-                        <span class="block text-surface-500 dark:text-surface-400 font-medium mb-4">Collected This Month</span>
+                        <span class="text-surface-500 dark:text-surface-400 font-medium mb-4 block">{{ $t('dashboard.collectedThisMonth') }}</span>
                         <div class="text-surface-900 dark:text-surface-0 font-bold text-3xl">{{ formatCurrency(collectedThisMonth) }}</div>
                     </div>
                     <div class="flex items-center justify-center bg-green-100 dark:bg-green-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
@@ -219,8 +228,8 @@ const formatCurrency = (val) => (val || 0).toLocaleString('en-US', { style: 'cur
                     </div>
                 </div>
                 <div class="mt-auto">
-                    <span class="text-green-500 font-medium">Synced </span>
-                    <span class="text-surface-500 dark:text-surface-400">with payments</span>
+                    <span class="text-green-500 font-medium">{{ $t('dashboard.syncedWithPayments').split(' ')[0] }} </span>
+                    <span class="text-surface-500 dark:text-surface-400">{{ $t('dashboard.syncedWithPayments').split(' ').slice(1).join(' ') }}</span>
                 </div>
             </div>
         </div>
@@ -230,7 +239,7 @@ const formatCurrency = (val) => (val || 0).toLocaleString('en-US', { style: 'cur
             <div class="card mb-0 h-full flex flex-col shadow-sm border border-surface-200 dark:border-surface-700">
                 <div class="flex justify-between mb-4">
                     <div>
-                        <span class="block text-surface-500 dark:text-surface-400 font-medium mb-4">Active Clients</span>
+                        <span class="text-surface-500 dark:text-surface-400 font-medium mb-4 block">{{ $t('dashboard.activeClients') }}</span>
                         <div class="text-surface-900 dark:text-surface-0 font-bold text-3xl">{{ activeClients }} / {{ totalClients }}</div>
                     </div>
                     <div class="flex items-center justify-center bg-cyan-100 dark:bg-cyan-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
@@ -238,8 +247,8 @@ const formatCurrency = (val) => (val || 0).toLocaleString('en-US', { style: 'cur
                     </div>
                 </div>
                 <div class="mt-auto">
-                    <ProgressBar :value="(totalClients > 0 ? (activeClients/totalClients)*100 : 0)" :showValue="false" style="height: 6px;" />
-                    <span class="text-sm text-surface-500 dark:text-surface-400 mt-2 block">Engagement Rate</span>
+                    <ProgressBar :value="totalClients > 0 ? (activeClients / totalClients) * 100 : 0" :showValue="false" style="height: 6px" />
+                    <span class="text-sm text-surface-500 dark:text-surface-400 mt-2 block">{{ $t('dashboard.engagementRate') }}</span>
                 </div>
             </div>
         </div>
@@ -249,7 +258,7 @@ const formatCurrency = (val) => (val || 0).toLocaleString('en-US', { style: 'cur
             <div class="card mb-0 h-full flex flex-col shadow-sm border border-surface-200 dark:border-surface-700">
                 <div class="flex justify-between mb-4">
                     <div>
-                        <span class="block text-surface-500 dark:text-surface-400 font-medium mb-4">Pending Invoices</span>
+                        <span class="text-surface-500 dark:text-surface-400 font-medium mb-4 block">{{ $t('dashboard.pendingInvoices') }}</span>
                         <div class="text-surface-900 dark:text-surface-0 font-bold text-3xl">{{ invoiceStatusCounts.Pending || 0 }}</div>
                     </div>
                     <div class="flex items-center justify-center bg-purple-100 dark:bg-purple-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
@@ -257,8 +266,8 @@ const formatCurrency = (val) => (val || 0).toLocaleString('en-US', { style: 'cur
                     </div>
                 </div>
                 <div class="mt-auto">
-                    <span class="text-purple-500 font-medium">Action Needed </span>
-                    <span class="text-surface-500 dark:text-surface-400">immediately</span>
+                    <span class="text-purple-500 font-medium">{{ $t('dashboard.actionNeeded') }} </span>
+                    <span class="text-surface-500 dark:text-surface-400">{{ $t('dashboard.immediately') }}</span>
                 </div>
             </div>
         </div>
@@ -266,13 +275,13 @@ const formatCurrency = (val) => (val || 0).toLocaleString('en-US', { style: 'cur
         <!-- Invoice Status Breakdown Cards -->
         <div class="col-span-12 xl:col-span-6">
             <div class="card h-full">
-                <h5 class="text-lg font-semibold mb-6">Invoice Status Distribution</h5>
+                <h5 class="text-lg font-semibold mb-6">{{ $t('dashboard.statusDistribution') }}</h5>
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
                     <!-- Paid -->
                     <div class="flex flex-col p-4 border rounded-xl bg-green-50 dark:bg-green-400/10 border-green-200 dark:border-green-800">
                         <div class="flex items-center gap-3 mb-2">
                             <i class="pi pi-check-circle text-green-500 text-xl"></i>
-                            <span class="font-medium text-green-700 dark:text-green-300">Paid</span>
+                            <span class="font-medium text-green-700 dark:text-green-300">{{ $t('dashboard.status.paid') }}</span>
                         </div>
                         <span class="text-3xl font-bold text-green-700 dark:text-green-200">{{ invoiceStatusCounts.Paid || 0 }}</span>
                     </div>
@@ -281,7 +290,7 @@ const formatCurrency = (val) => (val || 0).toLocaleString('en-US', { style: 'cur
                     <div class="flex flex-col p-4 border rounded-xl bg-cyan-50 dark:bg-cyan-400/10 border-cyan-200 dark:border-cyan-800">
                         <div class="flex items-center gap-3 mb-2">
                             <i class="pi pi-clock text-cyan-500 text-xl"></i>
-                            <span class="font-medium text-cyan-700 dark:text-cyan-300">Pending</span>
+                            <span class="font-medium text-cyan-700 dark:text-cyan-300">{{ $t('dashboard.status.pending') }}</span>
                         </div>
                         <span class="text-3xl font-bold text-cyan-700 dark:text-cyan-200">{{ invoiceStatusCounts.Pending || 0 }}</span>
                     </div>
@@ -290,7 +299,7 @@ const formatCurrency = (val) => (val || 0).toLocaleString('en-US', { style: 'cur
                     <div class="flex flex-col p-4 border rounded-xl bg-red-50 dark:bg-red-400/10 border-red-200 dark:border-red-800">
                         <div class="flex items-center gap-3 mb-2">
                             <i class="pi pi-exclamation-triangle text-red-500 text-xl"></i>
-                            <span class="font-medium text-red-700 dark:text-red-300">Overdue</span>
+                            <span class="font-medium text-red-700 dark:text-red-300">{{ $t('dashboard.status.overdue') }}</span>
                         </div>
                         <span class="text-3xl font-bold text-red-700 dark:text-red-200">{{ invoiceStatusCounts.Overdue || 0 }}</span>
                     </div>
@@ -299,7 +308,7 @@ const formatCurrency = (val) => (val || 0).toLocaleString('en-US', { style: 'cur
                     <div class="flex flex-col p-4 border rounded-xl bg-surface-100 dark:bg-surface-700/30 border-surface-200 dark:border-surface-700">
                         <div class="flex items-center gap-3 mb-2">
                             <i class="pi pi-file-edit text-surface-500 text-xl"></i>
-                            <span class="font-medium text-surface-700 dark:text-surface-300">Draft</span>
+                            <span class="font-medium text-surface-700 dark:text-surface-300">{{ $t('dashboard.status.draft') }}</span>
                         </div>
                         <span class="text-3xl font-bold text-surface-800 dark:text-surface-100">{{ invoiceStatusCounts.Draft || 0 }}</span>
                     </div>
@@ -308,7 +317,7 @@ const formatCurrency = (val) => (val || 0).toLocaleString('en-US', { style: 'cur
                     <div class="flex flex-col p-4 border rounded-xl bg-orange-50 dark:bg-orange-400/10 border-orange-200 dark:border-orange-800">
                         <div class="flex items-center gap-3 mb-2">
                             <i class="pi pi-times-circle text-orange-500 text-xl"></i>
-                            <span class="font-medium text-orange-700 dark:text-orange-300">Cancelled</span>
+                            <span class="font-medium text-orange-700 dark:text-orange-300">{{ $t('dashboard.status.cancelled') }}</span>
                         </div>
                         <span class="text-3xl font-bold text-orange-700 dark:text-orange-200">{{ invoiceStatusCounts.Cancelled || 0 }}</span>
                     </div>
@@ -318,7 +327,7 @@ const formatCurrency = (val) => (val || 0).toLocaleString('en-US', { style: 'cur
 
         <div class="col-span-12 xl:col-span-6">
             <div class="card flex flex-col items-center h-full">
-                <h5 class="text-lg font-semibold mb-6 self-start w-full">Paid vs Pending</h5>
+                <h5 class="text-lg font-semibold mb-6 self-start w-full">{{ $t('dashboard.paidVsPending') }}</h5>
                 <div class="flex justify-center w-full h-[20rem]">
                     <Chart type="doughnut" :data="pieData" :options="pieOptions" class="w-full h-full" />
                 </div>
