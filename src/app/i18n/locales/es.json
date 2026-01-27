@@ -1,0 +1,230 @@
+{
+    "menu": {
+        "home": "Inicio",
+        "dashboard": "Panel de Control",
+        "clients": "Clientes",
+        "invoices": "Facturas",
+        "payments": "Pagos",
+        "getStarted": "Comenzar",
+        "documentation": "Documentación"
+    },
+    "configurator": {
+        "primary": "Primario",
+        "surface": "Superficie",
+        "menuMode": "Modo de Menú",
+        "language": "Idioma",
+        "static": "Estático",
+        "overlay": "Superposición"
+    },
+    "topbar": {
+        "logout": "Cerrar Sesión",
+        "logoutConfirmMessage": "¿Estás seguro de que deseas cerrar sesión?",
+        "logoutConfirmHeader": "Confirmar Cierre de Sesión",
+        "cancel": "Cancelar",
+        "user": "Usuario"
+    },
+    "dashboard": {
+        "totalReceivable": "Total por Cobrar",
+        "outstandingBalance": "Saldo pendiente",
+        "collectedThisMonth": "Cobrado Este Mes",
+        "syncedWithPayments": "Sincronizado con pagos",
+        "activeClients": "Clientes Activos",
+        "engagementRate": "Tasa de Compromiso",
+        "pendingInvoices": "Facturas Pendientes",
+        "actionNeeded": "Acción Requerida",
+        "immediately": "de inmediato",
+        "statusDistribution": "Distribución de Estados de Factura",
+        "paidVsPending": "Pagado vs Pendiente",
+        "status": {
+            "paid": "Pagado",
+            "sent": "Enviado",
+            "pending": "Pendiente",
+            "partial_payment": "Pago Parcial",
+            "overdue": "Vencido",
+            "draft": "Borrador",
+            "cancelled": "Cancelado"
+        }
+    },
+    "common": {
+        "new": "Nuevo",
+        "delete": "Eliminar",
+        "export": "Exportar",
+        "search": "Buscar...",
+        "save": "Guardar",
+        "cancel": "Cancelar",
+        "confirm": "Confirmar",
+        "yes": "Sí",
+        "no": "No",
+        "details": "Detalles",
+        "actions": "Acciones",
+        "successful": "Exitoso",
+        "error": "Error",
+        "deleted": "Eliminado",
+        "deleted_selected": "Seleccionados Eliminados",
+        "operation_failed": "Operación fallida",
+        "delete_failed": "Error al eliminar",
+        "batch_delete_failed": "Error al eliminar en lote",
+        "management": "Gestión",
+        "showing": "Mostrando {first} a {last} de {totalRecords} entradas"
+    },
+    "clients": {
+        "title": "Gestionar Clientes",
+        "entityName": "Cliente",
+        "name": "Nombre",
+        "email": "Email",
+        "phone": "Teléfono",
+        "company": "Empresa",
+        "status": "Estado",
+        "active": "Activo",
+        "inactive": "Inactivo",
+        "created": "Cliente Creado",
+        "updated": "Cliente Actualizado",
+        "deleted": "Cliente Eliminado",
+        "batch_deleted": "Clientes Eliminados",
+        "confirm_delete": "¿Estás seguro de que deseas eliminar a <b>{name}</b>?",
+        "confirm_delete_selected": "¿Estás seguro de que deseas eliminar los clientes seleccionados?",
+        "name_required": "Nombre es requerido.",
+        "email_required": "Email es requerido.",
+        "select_status": "Selecciona un Estado",
+        "back_to_clients": "Volver a Clientes",
+        "client_since": "Cliente desde {date}",
+        "contact_info": "Información de Contacto",
+        "financial_summary": "Resumen Financiero",
+        "total_invoiced": "Total Facturado",
+        "total_collected": "Total Recaudado",
+        "invoices_generated": "{count} facturas generadas",
+        "payments_received": "{count} pagos recibididos",
+        "pending_payment": "Pago pendiente",
+        "recent_invoices": "Facturas Recientes",
+        "invoice_number": "Número",
+        "date": "Fecha",
+        "amount": "Monto",
+        "load_error": "No se pudieron cargar los detalles del cliente"
+    },
+    "invoices": {
+        "title": "Gestionar Facturas",
+        "entityName": "Factura",
+        "invoice_number": "Factura #",
+        "client": "Cliente",
+        "date": "Fecha",
+        "due_date": "Fecha de Vencimiento",
+        "status": "Estado",
+        "total": "Total",
+        "add_item": "Agregar Item",
+        "items": "Items",
+        "description": "Descripción",
+        "qty": "Cant",
+        "price": "Precio",
+        "grand_total": "Gran Total",
+        "save_as": "Guardar Como",
+        "send_immediately": "Enviar de Inmediato (Default)",
+        "save_as_draft": "Guardar como Borrador",
+        "no_items": "No se han agregado items.",
+        "at_least_one_item": "Se requiere al menos un item.",
+        "created": "Factura Creada",
+        "updated": "Factura Actualizada",
+        "deleted": "Factura Eliminada",
+        "batch_deleted": "Facturas Eliminadas",
+        "back_to_invoices": "Volver a Facturas",
+        "add_payment": "Agregar Pago",
+        "client_details": "Detalles del Cliente",
+        "total_amount": "Monto Total",
+        "paid": "Pagado",
+        "remaining_balance": "Saldo Pendiente",
+        "payment_history": "Historial de Pagos",
+        "no_payments": "No hay pagos registrados aún.",
+        "register_payment": "Registrar Pago",
+        "amount": "Monto",
+        "method": "Método",
+        "note": "Nota",
+        "save_payment": "Guardar Pago",
+        "max": "Máx",
+        "method_transfer": "Transferencia",
+        "method_cash": "Efectivo",
+        "method_card": "Tarjeta",
+        "method_check": "Cheque",
+        "method_other": "Otro",
+        "payment_description": "Pago de {number}",
+        "confirm_cancel": "¿Estás seguro de que deseas cancelar esta factura? Esta acción no se puede deshacer fácilmente.",
+        "cancel_invoice": "Cancelar Factura",
+        "invoice_cancelled": "La factura ha sido cancelada",
+        "payment_registered": "Pago Registrado",
+        "status_updated": "Estado Actualizado",
+        "validation": {
+            "client_required": "El cliente es requerido",
+            "due_date_required": "La fecha de vencimiento es requerida",
+            "due_date_future": "La fecha debe ser hoy o en el futuro",
+            "item_required": "Se requiere al menos un item",
+            "check_descriptions": "Revisa las descripciones de los items",
+            "qty_positive": "La cantidad debe ser > 0",
+            "price_positive": "El precio debe ser mayor a 0"
+        }
+    },
+    "payments": {
+        "title": "Pagos",
+        "total_revenue": "Ingresos Totales",
+        "all_time": "Desde el inicio",
+        "received_payments": "pagos recibidos",
+        "transactions": "Transacciones",
+        "synced": "Sincronizado",
+        "with_supabase": "con Supabase",
+        "history": "Historial de Pagos",
+        "search_placeholder": "Buscar Cliente o Factura",
+        "method_placeholder": "Método",
+        "tooltip_cancelled": "La factura fue Cancelada ({number})",
+        "load_error": "No se pudieron cargar los pagos",
+        "status": {
+            "completed": "Completado",
+            "pending": "Pendiente",
+            "failed": "Fallido",
+            "refunded": "Reembolsado"
+        }
+    },
+    "footer": {
+        "text": "SEIKYU © 2026",
+        "by": "Hecho con ❤️ por",
+        "rights": "Todos los derechos reservados."
+    },
+    "docs": {
+        "title": "Proyecto SEIKYU",
+        "subtitle": "Un sistema de gestión financiera moderno y eficiente construido con <b>Vue 3</b>, <b>PrimeVue</b> y <b>Supabase</b>. Diseñado para ofrecer velocidad, escalabilidad y código limpio.",
+        "functional_core": "Núcleo Funcional",
+        "developer_guide": "Guía del Desarrollador: El Patrón",
+        "pattern_description": "SEIKYU utiliza un patrón de <b>Composable + Componente Genérico</b> para minimizar la duplicación de código.",
+        "steps_example": "// Ejemplo de creación de una nueva página de Entidad en 3 pasos",
+        "core_components": "Componentes Core",
+        "stack_tech": "Stack Tecnológico",
+        "pro_tip": "Consejo Pro",
+        "rls_tip": "Siempre revisa las <b>políticas RLS de Supabase</b> al agregar nuevas tablas para asegurar que el Auth Store pueda acceder a los datos de forma segura.",
+        "features": {
+            "auth": {
+                "title": "Autenticación",
+                "desc": "Inicio y cierre de sesión seguro mediante Supabase Auth. Persistencia de sesión con LocalStorage y sincronización de estado en tiempo real con Pinia."
+            },
+            "dashboard": {
+                "title": "Tablero de Control",
+                "desc": "Vista general centralizada de métricas de negocio incluyendo Total por Cobrar, Recaudación Mensual y Participación de Clientes."
+            },
+            "crm": {
+                "title": "CRM de Clientes",
+                "desc": "Gestión CRUD completa para clientes. Seguimiento de detalles de contacto, estado e historial financiero asociado."
+            },
+            "invoicing": {
+                "title": "Sistema de Facturación",
+                "desc": "Generación y gestión de facturas. Seguimiento de estados desde Borrador hasta Pagado o Vencido. Cálculos de saldo en tiempo real."
+            },
+            "payments": {
+                "title": "Seguimiento de Pagos",
+                "desc": "Registro de pagos contra facturas. Soporte para pagos parciales e historial completo de transacciones."
+            }
+        },
+        "status": {
+            "operational": "Operativo"
+        },
+        "architecture": {
+            "generic": "Un componente reutilizable de alto nivel que gestiona tablas, diálogos y formularios para cualquier entidad. Reduce el código repetitivo en un 70%.",
+            "composable": "Composable dinámico que proporciona acciones CRUD estándar (obtener, crear, actualizar, eliminar) para cualquier tabla de Supabase.",
+            "pinia": "Fuente única de verdad para los datos del usuario y el estado de la sesión. Reacciona automáticamente a los eventos de autenticación de Supabase."
+        }
+    }
+}

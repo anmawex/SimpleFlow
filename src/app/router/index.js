@@ -1,19 +1,51 @@
 import AppLayout from '@/app/layout/AppLayout.vue';
+import { useAuthStore } from '@/features/auth/store/auth';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
-            path: '/',
-            component: AppLayout,
+            path: '/login',
+            name: 'login',
+            component: () => import('@/features/auth/pages/Login.vue')
+        },
+        {
+            path: '/dashboard', // Nuevo prefijo para las rutas de la aplicación
+            component: AppLayout, // El layout principal de la aplicación
+            meta: { requiresAuth: true }, // Requiere autenticación
             children: [
                 {
-                    path: '/',
+                    path: '/dashboard',
                     name: 'dashboard',
                     component: () => import('@/features/dashboard/pages/Dashboard.vue')
                 },
                 {
+                    path: '/clients',
+                    name: 'clients',
+                    component: () => import('@/features/clients/views/ClientsPage.vue')
+                },
+                {
+                    path: '/clients/:id',
+                    name: 'client-details',
+                    component: () => import('@/features/clients/views/ClientDetails.vue')
+                },
+                {
+                    path: '/invoices',
+                    name: 'invoices',
+                    component: () => import('@/features/invoices/views/InvoicesPage.vue')
+                },
+                {
+                    path: '/invoices/:id',
+                    name: 'invoice-details',
+                    component: () => import('@/features/invoices/views/InvoiceDetails.vue')
+                },
+                {
+                    path: '/payments',
+                    name: 'payments',
+                    component: () => import('@/features/payments/views/PaymentsPage.vue')
+                },
+                /* {
                     path: '/uikit/formlayout',
                     name: 'formlayout',
                     component: () => import('@/shared/uikit/FormLayout.vue')
@@ -88,47 +120,60 @@ const router = createRouter({
                     path: '/uikit/timeline',
                     name: 'timeline',
                     component: () => import('@/shared/uikit/TimelineDoc.vue')
-                },
-                {
-                    path: '/blocks/free',
-                    name: 'blocks',
-                    meta: {
-                        breadcrumb: ['Prime Blocks', 'Free Blocks']
-                    },
-                    component: () => import('@/shared/utilities/Blocks.vue')
-                },
-                {
-                    path: '/pages/empty',
-                    name: 'empty',
-                    component: () => import('@/app/layout/EmptyLayout.vue')
-                },
-                {
-                    path: '/pages/crud',
-                    name: 'crud',
-                    component: () => import('@/features/examples/pages/Crud.vue')
-                },
+                }, */
+                // {
+                //     path: '/blocks/free',
+                //     name: 'blocks',
+                //     meta: {
+                //         breadcrumb: ['Prime Blocks', 'Free Blocks']
+                //     },
+                //     component: () => import('@/shared/utilities/Blocks.vue')
+                // },
+                // {
+                //     path: '/pages/empty',
+                //     name: 'empty',
+                //     component: () => import('@/app/layout/EmptyLayout.vue')
+                // },
+                // {
+                //     path: '/pages/crud',
+                //     name: 'crud',
+                //     component: () => import('@/features/examples/pages/Crud.vue')
+                // },
                 {
                     path: '/start/documentation',
                     name: 'documentation',
                     component: () => import('@/features/docs/pages/Documentation.vue')
+                },
+                // EJEMPLO 1: Acceso Denegado (descomenta para probar)
+                {
+                    path: '/admin-test',
+                    name: 'admin-test',
+                    component: () => import('@/features/dashboard/pages/Dashboard.vue'),
+                    meta: { requiresAuth: true, requiresAdmin: true }
+                },
+                // EJEMPLO 2: Error Crítico (Simulación de error en tiempo de ejecución)
+                {
+                    path: '/error-test',
+                    name: 'error-test',
+                    component: () => import('@/features/dashboard/pages/Dashboard.vue'), // Usamos uno que sí existe
+                    beforeEnter: (to, from, next) => {
+                        // Forzamos un error manual para que el router lo capture
+                        const error = new Error('Simulación de error: No se pudo conectar con el servidor de datos.');
+                        next(error); 
+                    },
+                    meta: { requiresAuth: true }
                 }
             ]
         },
         {
-            path: '/landing',
+            path: '/',
             name: 'landing',
-            component: () => import('@/features/home/pages/Landing.vue')
+            component: () => import('@/app/pages/Landing.vue')
         },
         {
             path: '/pages/notfound',
             name: 'notfound',
             component: () => import('@/app/pages/NotFound.vue')
-        },
-
-        {
-            path: '/auth/login',
-            name: 'login',
-            component: () => import('@/features/auth/pages/Login.vue')
         },
         {
             path: '/auth/access',
@@ -141,6 +186,40 @@ const router = createRouter({
             component: () => import('@/features/auth/pages/Error.vue')
         }
     ]
+});
+
+// Navigation Guard - Protección de rutas
+router.beforeEach((to, from, next) => {
+    const authStore = useAuthStore();
+    
+    // Verificar si la ruta requiere autenticación
+    const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+    
+    // Simulación de roles (opcional, para usar la página de Access Denied)
+    const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin);
+    
+    if (requiresAuth && !authStore.isAuthenticated) {
+        // Si la ruta requiere auth y el usuario no está autenticado, redirigir al login
+        console.log('[ROUTER] Access denied. Redirecting to login.');
+        next({ name: 'login', query: { redirect: to.fullPath } });
+    } else if (to.name === 'login' && authStore.isAuthenticated) {
+        // Si el usuario ya está autenticado e intenta ir al login, redirigir al dashboard
+        console.log('[ROUTER] User already authenticated. Redirecting to dashboard.');
+        next({ name: 'dashboard' });
+    } else if (requiresAdmin && authStore.isAuthenticated && !authStore.user?.user_metadata?.is_admin) {
+        // Si requiere admin y el usuario no lo es, mostrar Access Denied
+        console.log('[ROUTER] Admin privileges required.');
+        next({ name: 'accessDenied' });
+    } else {
+        // Permitir la navegación
+        next();
+    }
+});
+
+// Manejo Global de Errores del Router
+router.onError((error) => {
+    console.error('[ROUTER ERROR]:', error);
+    router.push({ name: 'error', query: { message: error.message } });
 });
 
 export default router;

@@ -1,149 +1,181 @@
-<template>
-    <div class="card">
-        <div class="font-semibold text-2xl mb-4">Documentation</div>
-        <div class="font-semibold text-xl mb-4">Get Started</div>
-        <p class="text-lg mb-4">
-            Sakai is an application template for Vue based on the <a href="https://github.com/vuejs/create-vue" class="font-medium text-primary hover:underline">create-vue</a>, the recommended way to start a <strong>Vite-powered</strong> Vue
-            projects. To get started, clone the <a href="https://github.com/primefaces/sakai-vue" class="font-medium text-primary hover:underline">repository</a> from GitHub and install the dependencies with npm or yarn.
-        </p>
-        <pre class="app-code">
-<code>git clone https://github.com/primefaces/sakai-vue
-npm install
-npm run dev</code></pre>
+<script setup>
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
-        <p class="text-lg mb-4">Navigate to <i class="bg-highlight px-2 py-1 rounded-border not-italic text-base">http://localhost:5173/</i> to view the application in your local environment.</p>
+const { t } = useI18n();
 
-        <pre class="app-code"><code>npm run dev</code></pre>
-
-        <div class="font-semibold text-xl mb-4">Structure</div>
-        <p class="text-lg mb-4">Templates consists of a couple folders, demos and layout have been separated so that you can easily remove what is not necessary for your application.</p>
-        <ul class="leading-normal list-disc pl-8 text-lg mb-4">
-            <li><span class="text-primary font-medium">src/layout</span>: Main layout files, needs to be present.</li>
-            <li><span class="text-primary font-medium">src/views</span>: Demo pages like Dashboard.</li>
-            <li><span class="text-primary font-medium">public/demo</span>: Assets used in demos</li>
-            <li><span class="text-primary font-medium">src/assets/demo</span>: Styles used in demos</li>
-            <li><span class="text-primary font-medium">src/assets/layout</span>: SCSS files of the main layout</li>
-        </ul>
-
-        <div class="font-semibold text-xl mb-4">Menu</div>
-        <p class="text-lg mb-4">
-            Main menu is defined at <span class="bg-highlight px-2 py-1 rounded-border not-italic text-base">src/layout/AppMenu.vue</span> file. Update the <i class="bg-highlight px-2 py-1 rounded-border not-italic text-base">model</i> property to
-            define your own menu items.
-        </p>
-
-        <div class="font-semibold text-xl mb-4">Layout Composable</div>
-        <p class="text-lg mb-4">
-            The <span class="bg-highlight px-2 py-1 rounded-border not-italic text-base">src/layout/composables/layout.js</span> is a composable that manages the layout state changes including dark mode, PrimeVue theme, menu modes and states. If you
-            change the initial values like the preset or colors, make sure to apply them at PrimeVue config at main.js as well.
-        </p>
-
-        <div class="font-semibold text-xl mb-4">Tailwind CSS</div>
-        <p class="text-lg mb-4">The demo pages are developed with Tailwind CSS however the core application shell mainly uses custom CSS.</p>
-
-        <div class="font-semibold text-xl mb-4">Variables</div>
-        <p class="text-lg mb-4">
-            CSS variables used in the template derive their values from the PrimeVue styled mode presets, use the files under <span class="bg-highlight px-2 py-1 rounded-border not-italic text-base">assets/layout/_variables.scss</span> to customize
-            according to your requirements.
-        </p>
-
-        <div class="font-semibold text-xl mb-4">Add Sakai-Vue to a Nuxt Project</div>
-        <p class="text-lg mb-4">To get started, create a Nuxt project.</p>
-        <pre class="app-code">
-<code>npx nuxi@latest init sakai-nuxt</code></pre>
-
-        <p class="text-lg mb-4">Add Prime related libraries to the project.</p>
-        <pre class="app-code">
-<code>npm install primevue @primevue/themes tailwindcss-primeui primeicons
-npm install --save-dev @primevue/nuxt-module</code></pre>
-
-        <p class="text-lg mb-4">Add PrimeVue-Nuxt module to <span class="bg-highlight px-2 py-1 rounded-border not-italic text-base">nuxt.config.js</span></p>
-        <pre class="app-code">
-<code>modules: [
-    '@primevue/nuxt-module',
-]</code></pre>
-
-        <p class="text-lg mb-4">Install <a href="https://tailwindcss.com/docs/guides/nuxtjs" class="font-medium text-primary hover:underline">Tailwind CSS</a> with Nuxt using official documentation.</p>
-
-        <p class="text-lg mb-4">
-            Add <span class="bg-highlight px-2 py-1 rounded-border not-italic text-base">tailwindcss-primeui</span> package as a plugin to <span class="bg-highlight px-2 py-1 rounded-border not-italic text-base">tailwind.config.js</span>
-        </p>
-        <pre class="app-code">
-<code>plugins: [require('tailwindcss-primeui')]</code></pre>
-
-        <p class="text-lg mb-4">Add PrimeVue to in <span class="bg-highlight px-2 py-1 rounded-border not-italic text-base">nuxt.config.js</span></p>
-        <pre class="app-code">
-<code>import Aura from '@primevue/themes/aura';
-
-primevue: {
-    options: {
-        theme: {
-            preset: Aura,
-            options: {
-                darkModeSelector: '.app-dark'
-            }
-        }
+const features = computed(() => [
+    {
+        title: t('docs.features.auth.title'),
+        icon: 'pi pi-lock',
+        color: 'blue',
+        description: t('docs.features.auth.desc'),
+        status: t('docs.status.operational')
+    },
+    {
+        title: t('docs.features.dashboard.title'),
+        icon: 'pi pi-chart-bar',
+        color: 'purple',
+        description: t('docs.features.dashboard.desc'),
+        status: t('docs.status.operational')
+    },
+    {
+        title: t('docs.features.crm.title'),
+        icon: 'pi pi-users',
+        color: 'cyan',
+        description: t('docs.features.crm.desc'),
+        status: t('docs.status.operational')
+    },
+    {
+        title: t('docs.features.invoicing.title'),
+        icon: 'pi pi-file-pdf',
+        color: 'orange',
+        description: t('docs.features.invoicing.desc'),
+        status: t('docs.status.operational')
+    },
+    {
+        title: t('docs.features.payments.title'),
+        icon: 'pi pi-money-bill',
+        color: 'green',
+        description: t('docs.features.payments.desc'),
+        status: t('docs.status.operational')
     }
-}</code></pre>
+]);
 
-        <p class="text-lg mb-4">
-            Copy <span class="bg-highlight px-2 py-1 rounded-border not-italic text-base">src/assets</span> folder and paste them to <span class="bg-highlight px-2 py-1 rounded-border not-italic text-base">assets</span> folder to your Nuxt project.
-            And add to <span class="bg-highlight px-2 py-1 rounded-border not-italic text-base">nuxt.config.js</span>
-        </p>
-        <pre class="app-code">
-<code>css: ['~/assets/tailwind.css', '~/assets/styles.scss']</code></pre>
+const architecture = computed(() => [
+    {
+        label: 'GenericCrud.vue',
+        detail: t('docs.architecture.generic'),
+        icon: 'pi pi-box'
+    },
+    {
+        label: 'useSupabaseCrud.js',
+        detail: t('docs.architecture.composable'),
+        icon: 'pi pi-database'
+    },
+    {
+        label: 'Auth Store (Pinia)',
+        detail: t('docs.architecture.pinia'),
+        icon: 'pi pi-shield'
+    }
+]);
+</script>
 
-        <p class="text-lg mb-4">Change <span class="bg-highlight px-2 py-1 rounded-border not-italic text-base">app.vue</span></p>
-        <pre class="app-code">
-<code>&lt;template&gt;
-    &lt;NuxtLayout&gt;
-        &lt;NuxtPage /&gt;
-    &lt;/NuxtLayout&gt;
-&lt;/template&gt;</code></pre>
+<template>
+    <div class="card overflow-hidden">
+        <!-- Header -->
+        <div class="relative p-8 mb-8 bg-gradient-to-r from-primary-500 to-primary-700 rounded-2xl text-white">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div>
+                    <h1 class="text-4xl font-bold mb-2">{{ $t('docs.title') }}</h1>
+                    <p class="text-lg opacity-90 max-w-2xl" v-html="$t('docs.subtitle')"></p>
+                </div>
+                <div class="hidden md:block">
+                    <i class="pi pi-directions text-8xl opacity-20"></i>
+                </div>
+            </div>
+        </div>
 
-        <p class="text-lg mb-4">Create <span class="bg-highlight px-2 py-1 rounded-border not-italic text-base">layouts/default.vue</span> and paste this code:</p>
-        <pre class="app-code">
-<code>&lt;script setup&gt;
-import AppLayout from './AppLayout.vue';
-&lt;/script&gt;
+        <div class="grid grid-cols-12 gap-8">
+            <!-- Functional Modules -->
+            <div class="col-span-12 lg:col-span-8">
+                <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                    <i class="pi pi-th-large text-primary"></i>
+                    {{ $t('docs.functional_core') }}
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div v-for="f in features" :key="f.title" class="p-4 border border-surface-200 dark:border-surface-700 rounded-xl hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div :class="`bg-${f.color}-100 dark:bg-${f.color}-400/10 p-2 rounded-lg`">
+                                <i :class="[f.icon, `text-${f.color}-500`]"></i>
+                            </div>
+                            <span class="font-bold text-lg">{{ f.title }}</span>
+                        </div>
+                        <p class="text-surface-600 dark:text-surface-400 text-sm leading-relaxed mb-4">
+                            {{ f.description }}
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <Tag :value="f.status" severity="success" rounded />
+                            <i class="pi pi-arrow-right text-xs opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
 
-&lt;template&gt;
-    &lt;AppLayout /&gt;
-&lt;/template&gt;</code></pre>
+                <!-- Pattern Documentation -->
+                <div class="mt-12">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                        <i class="pi pi-code text-primary"></i>
+                        {{ $t('docs.developer_guide') }}
+                    </h2>
+                    <div class="card bg-surface-50 dark:bg-surface-800/50 border-none">
+                        <p class="mb-4" v-html="$t('docs.pattern_description')"></p>
+                        <pre class="app-code bg-surface-950 text-surface-0 p-4 rounded-lg overflow-x-auto text-sm">
+<code>// {{ $t('docs.steps_example') }}
+const { items, fetchAll } = useSupabaseCrud('my_table');
+onMounted(fetchAll);
 
-        <p class="text-lg mb-4">
-            Create <span class="bg-highlight px-2 py-1 rounded-border not-italic text-base">layouts</span> folder and copy <span class="bg-highlight px-2 py-1 rounded-border not-italic text-base">src/layout</span> folder and paste them. And then
-            create <span class="bg-highlight px-2 py-1 rounded-border not-italic text-base">composables/use-layout.vue</span> and replace it with
-            <span class="bg-highlight px-2 py-1 rounded-border not-italic text-base">src/layout/composables/layout.js</span>. Then remove this line:
-        </p>
-        <pre class="app-code">
-<code>import { useLayout } from '@/app/layout/composables/layout';</code></pre>
+&lt;GenericCrud 
+    title="My Entities" 
+    :items="items" 
+    @save="handleSave"
+&gt;
+    &lt;template #form="{ item }"&gt;
+        &lt;InputText v-model="item.name" /&gt;
+    &lt;/template&gt;
+&lt;/GenericCrud&gt;</code></pre>
+                    </div>
+                </div>
+            </div>
 
-        <p class="text-lg mb-4">As a final step, copy the following folders:</p>
-        <ul class="leading-normal list-disc pl-8 text-lg mb-4">
-            <li><span class="text-primary font-medium">public/demo</span> <i class="pi pi-arrow-right text-sm! mr-1"></i> <span class="text-primary font-medium">public</span></li>
-            <li><span class="text-primary font-medium">src/components</span> <i class="pi pi-arrow-right text-sm! mr-1"></i> <span class="text-primary font-medium">components</span></li>
-            <li><span class="text-primary font-medium">src/service</span> <i class="pi pi-arrow-right text-sm! mr-1"></i> <span class="text-primary font-medium">service</span></li>
-            <li><span class="text-primary font-medium">src/views/uikit</span> <i class="pi pi-arrow-right text-sm! mr-1"></i> <span class="text-primary font-medium">pages/uikit</span></li>
-            <li><span class="text-primary font-medium">src/views/pages</span> <i class="pi pi-arrow-right text-sm! mr-1"></i> <span class="text-primary font-medium">pages</span></li>
-        </ul>
+            <!-- Technical Stack & Sidebar -->
+            <div class="col-span-12 lg:col-span-4">
+                <div class="sticky top-8">
+                    <h3 class="text-xl font-bold mb-4">{{ $t('docs.core_components') }}</h3>
+                    <div class="flex flex-col gap-4 mb-8">
+                        <div v-for="item in architecture" :key="item.label" class="flex gap-4 p-4 bg-surface-50 dark:bg-surface-800/30 rounded-xl">
+                            <i :class="[item.icon, 'text-primary text-xl mt-1']"></i>
+                            <div>
+                                <div class="font-bold mb-1">{{ item.label }}</div>
+                                <div class="text-xs text-surface-500">{{ item.detail }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-bold mb-4">{{ $t('docs.stack_tech') }}</h3>
+                    <ul class="list-none p-0 m-0">
+                        <li class="flex items-center gap-3 p-3 border-b border-surface-200 dark:border-surface-700">
+                            <img src="https://vuejs.org/logo.svg" width="20" height="20" alt="Vue" />
+                            <span class="font-medium text-sm">Vue 3 (Composition API)</span>
+                        </li>
+                        <li class="flex items-center gap-3 p-3 border-b border-surface-200 dark:border-surface-700">
+                            <i class="pi pi-prime text-green-500"></i>
+                            <span class="font-medium text-sm">PrimeVue 4 + Tailwind CSS</span>
+                        </li>
+                        <li class="flex items-center gap-3 p-3 border-b border-surface-200 dark:border-surface-700">
+                            <i class="pi pi-bolt text-yellow-500"></i>
+                            <span class="font-medium text-sm">Supabase (PostgreSQL + Auth)</span>
+                        </li>
+                        <li class="flex items-center gap-3 p-3">
+                            <i class="pi pi-external-link text-blue-500"></i>
+                            <span class="font-medium text-sm">Pinia (State Management)</span>
+                        </li>
+                    </ul>
+
+                    <div class="mt-8 p-6 bg-primary-50 dark:bg-primary-900/10 rounded-2xl border border-primary-100 dark:border-primary-800">
+                        <div class="flex items-center gap-2 mb-2">
+                             <i class="pi pi-info-circle text-primary"></i>
+                             <span class="font-bold">{{ $t('docs.pro_tip') }}</span>
+                        </div>
+                        <p class="text-sm text-surface-600 dark:text-surface-400" v-html="$t('docs.rls_tip')"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
-<style lang="scss" scoped>
-@media screen and (max-width: 991px) {
-    .video-container {
-        position: relative;
-        width: 100%;
-        height: 0;
-        padding-bottom: 56.25%;
-
-        iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-    }
+<style scoped>
+.app-code {
+    font-family: 'Courier New', Courier, monospace;
 }
 </style>
