@@ -1,6 +1,6 @@
-# SimpleFlow
+# SEIKYU
 
-SimpleFlow is a Vue 3 application with Supabase authentication, built on top of the Sakai template using PrimeVue components.
+SEIKYU is a Vue 3 application with Supabase authentication, built on top of the Sakai template using PrimeVue components.
 
 ## 🚀 Quick Start
 
@@ -15,7 +15,7 @@ SimpleFlow is a Vue 3 application with Supabase authentication, built on top of 
 1. **Clone the repository**
    ```bash
    git clone <your-repo-url>
-   cd simpleFlow
+   cd SEIKYU
    ```
 
 2. **Install dependencies**

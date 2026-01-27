@@ -64,7 +64,7 @@ const architecture = ref([
         <div class="relative p-8 mb-8 bg-gradient-to-r from-primary-500 to-primary-700 rounded-2xl text-white">
             <div class="flex flex-col md:flex-row justify-between items-center gap-6">
                 <div>
-                    <h1 class="text-4xl font-bold mb-2">SimpleFlow Project</h1>
+                    <h1 class="text-4xl font-bold mb-2">SEIKYU Project</h1>
                     <p class="text-lg opacity-90 max-w-2xl">
                         A modern, efficient financial management system built with <b>Vue 3</b>, <b>PrimeVue</b>, and <b>Supabase</b>. 
                         Designed for speed, scalability, and clean code.
@@ -108,7 +108,7 @@ const architecture = ref([
                         Developer Guide: The Pattern
                     </h2>
                     <div class="card bg-surface-50 dark:bg-surface-800/50 border-none">
-                        <p class="mb-4">SimpleFlow uses a <b>Composable + Generic Component</b> pattern to minimize code duplication.</p>
+                        <p class="mb-4">SEIKYU uses a <b>Composable + Generic Component</b> pattern to minimize code duplication.</p>
                         <pre class="app-code bg-surface-950 text-surface-0 p-4 rounded-lg overflow-x-auto text-sm">
 <code>// Example of creating a new Entity page in 3 steps
 const { items, fetchAll } = useSupabaseCrud('my_table');

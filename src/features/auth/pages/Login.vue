@@ -128,7 +128,7 @@ const handleLogin = async () => {
                                 />
                             </g>
                         </svg>
-                        <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">¡Bienvenido a SimpleFlow!</div>
+                        <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">¡Bienvenido a SEIKYU!</div>
                         <span class="text-muted-color font-medium">Inicia sesión para continuar</span>
                     </div>
 

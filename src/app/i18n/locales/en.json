@@ -179,5 +179,10 @@
             "failed": "Failed",
             "refunded": "Refunded"
         }
+    },
+    "footer": {
+        "text": "SEIKYU © 2026",
+        "by": "Made with ❤️ by",
+        "rights": "All rights reserved."
     }
 }
