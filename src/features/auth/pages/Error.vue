@@ -1,5 +1,15 @@
 <script setup>
+import { useAuthStore } from '@/features/auth/store/auth';
 import FloatingConfigurator from '@/shared/utilities/FloatingConfigurator.vue';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const authStore = useAuthStore();
+
+const errorMessage = computed(() => route.query.message || 'Ha ocurrido un error inesperado al procesar tu solicitud.');
+const goHomePath = computed(() => authStore.isAuthenticated ? '/dashboard' : '/');
+const buttonLabel = computed(() => authStore.isAuthenticated ? 'Ir al Dashboard' : 'Ir al Inicio');
 </script>
 
 <template>
@@ -12,11 +22,11 @@ import FloatingConfigurator from '@/shared/utilities/FloatingConfigurator.vue';
                         <div class="flex justify-center items-center border-2 border-pink-500 rounded-full" style="height: 3.2rem; width: 3.2rem">
                             <i class="pi pi-fw pi-exclamation-circle text-2xl! text-pink-500"></i>
                         </div>
-                        <h1 class="text-surface-900 dark:text-surface-0 font-bold text-5xl mb-2">Error Occured</h1>
-                        <span class="text-muted-color mb-8">Requested resource is not available.</span>
+                        <h1 class="text-surface-900 dark:text-surface-0 font-bold text-5xl mb-2">Error Crítico</h1>
+                        <span class="text-muted-color mb-8 text-center">{{ errorMessage }}</span>
                         <img src="/demo/images/error/asset-error.svg" alt="Error" class="mb-8" width="80%" />
                         <div class="col-span-12 mt-8 text-center">
-                            <Button as="router-link" label="Go to Dashboard" to="/" severity="danger" />
+                            <Button as="router-link" :label="buttonLabel" :to="goHomePath" severity="danger" />
                         </div>
                     </div>
                 </div>

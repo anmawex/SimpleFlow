@@ -143,6 +143,25 @@ const router = createRouter({
                     path: '/start/documentation',
                     name: 'documentation',
                     component: () => import('@/features/docs/pages/Documentation.vue')
+                },
+                // EJEMPLO 1: Acceso Denegado (descomenta para probar)
+                {
+                    path: '/admin-test',
+                    name: 'admin-test',
+                    component: () => import('@/features/dashboard/pages/Dashboard.vue'),
+                    meta: { requiresAuth: true, requiresAdmin: true }
+                },
+                // EJEMPLO 2: Error Crítico (Simulación de error en tiempo de ejecución)
+                {
+                    path: '/error-test',
+                    name: 'error-test',
+                    component: () => import('@/features/dashboard/pages/Dashboard.vue'), // Usamos uno que sí existe
+                    beforeEnter: (to, from, next) => {
+                        // Forzamos un error manual para que el router lo capture
+                        const error = new Error('Simulación de error: No se pudo conectar con el servidor de datos.');
+                        next(error); 
+                    },
+                    meta: { requiresAuth: true }
                 }
             ]
         },
@@ -176,6 +195,9 @@ router.beforeEach((to, from, next) => {
     // Verificar si la ruta requiere autenticación
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
     
+    // Simulación de roles (opcional, para usar la página de Access Denied)
+    const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin);
+    
     if (requiresAuth && !authStore.isAuthenticated) {
         // Si la ruta requiere auth y el usuario no está autenticado, redirigir al login
         console.log('[ROUTER] Access denied. Redirecting to login.');
@@ -184,10 +206,20 @@ router.beforeEach((to, from, next) => {
         // Si el usuario ya está autenticado e intenta ir al login, redirigir al dashboard
         console.log('[ROUTER] User already authenticated. Redirecting to dashboard.');
         next({ name: 'dashboard' });
+    } else if (requiresAdmin && authStore.isAuthenticated && !authStore.user?.user_metadata?.is_admin) {
+        // Si requiere admin y el usuario no lo es, mostrar Access Denied
+        console.log('[ROUTER] Admin privileges required.');
+        next({ name: 'accessDenied' });
     } else {
         // Permitir la navegación
         next();
     }
+});
+
+// Manejo Global de Errores del Router
+router.onError((error) => {
+    console.error('[ROUTER ERROR]:', error);
+    router.push({ name: 'error', query: { message: error.message } });
 });
 
 export default router;
