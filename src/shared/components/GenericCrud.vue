@@ -2,6 +2,9 @@
 import { FilterMatchMode } from '@primevue/core/api';
 import { useToast } from 'primevue/usetoast';
 import { defineEmits, defineProps, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps({
     title: { type: String, default: 'Management' },
@@ -12,7 +15,9 @@ const props = defineProps({
     displayField: { type: String, default: 'name' }, // Campo a mostrar en dialogos de confirmación (ej. name, title, id)
     showEdit: { type: Boolean, default: true },
     showDelete: { type: Boolean, default: true },
-    manualClose: { type: Boolean, default: false } // Nueva prop para controlar el cierre
+    manualClose: { type: Boolean, default: false },
+    confirmDeleteMessage: { type: String, default: null }, // Opcional: mensaje personalizado
+    confirmDeleteSelectedMessage: { type: String, default: null } // Opcional: mensaje personalizado
 });
 
 const emit = defineEmits(['save', 'delete', 'delete-selected']);
@@ -55,7 +60,7 @@ function deleteItem() {
     emit('delete', item.value);
     deleteItemDialog.value = false;
     item.value = {};
-    toast.add({ severity: 'success', summary: 'Successful', detail: 'Deleted', life: 3000 });
+    toast.add({ severity: 'success', summary: t('common.successful'), detail: t('common.deleted'), life: 3000 });
 }
 
 function saveItem() {
@@ -87,7 +92,7 @@ function deleteSelectedItems() {
     emit('delete-selected', selectedItems.value);
     deleteUtilsDialog.value = false;
     selectedItems.value = null;
-    toast.add({ severity: 'success', summary: 'Successful', detail: 'Deleted Selected', life: 3000 });
+    toast.add({ severity: 'success', summary: t('common.successful'), detail: t('common.deleted_selected'), life: 3000 });
 }
 
 function exportCSV() {
@@ -101,12 +106,12 @@ function exportCSV() {
             <!-- Toolbar -->
             <Toolbar class="mb-6">
                 <template #start>
-                    <Button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" @click="openNew" />
-                    <Button label="Delete" icon="pi pi-trash" severity="secondary" @click="confirmDeleteSelected" :disabled="!selectedItems || !selectedItems.length" />
+                    <Button :label="$t('common.new')" icon="pi pi-plus" severity="secondary" class="mr-2" @click="openNew" />
+                    <Button :label="$t('common.delete')" icon="pi pi-trash" severity="secondary" @click="confirmDeleteSelected" :disabled="!selectedItems || !selectedItems.length" />
                 </template>
 
                 <template #end>
-                    <Button label="Export" icon="pi pi-upload" severity="secondary" @click="exportCSV($event)" />
+                    <Button :label="$t('common.export')" icon="pi pi-upload" severity="secondary" @click="exportCSV($event)" />
                 </template>
             </Toolbar>
 
@@ -122,7 +127,7 @@ function exportCSV() {
                 :filters="filters"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                 :rowsPerPageOptions="[5, 10, 25]"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                :currentPageReportTemplate="$t('common.showing')"
             >
                 <template #header>
                     <div class="flex flex-wrap gap-2 items-center justify-between">
@@ -131,7 +136,7 @@ function exportCSV() {
                             <InputIcon>
                                 <i class="pi pi-search" />
                             </InputIcon>
-                            <InputText v-model="filters['global'].value" placeholder="Search..." />
+                            <InputText v-model="filters['global'].value" :placeholder="$t('common.search')" />
                         </IconField>
                     </div>
                 </template>
@@ -169,39 +174,45 @@ function exportCSV() {
         </div>
 
         <!-- Edit Dialog -->
-        <Dialog v-model:visible="itemDialog" :style="{ width: '900px', maxWidth: '90vw' }" :header="`${entityName} Details`" :modal="true" class="p-fluid">
+        <Dialog v-model:visible="itemDialog" :style="{ width: '900px', maxWidth: '90vw' }" :header="$t('common.details', { entity: entityName })" :modal="true" class="p-fluid">
             <div class="flex flex-col gap-6">
                 <!-- Slot para el formulario específico -->
                 <slot name="form" :item="item" :submitted="submitted"></slot>
             </div>
 
             <template #footer>
-                <Button label="Cancel" icon="pi pi-times" text @click="hideDialog" />
-                <Button label="Save" icon="pi pi-check" @click="saveItem" />
+                <Button :label="$t('common.cancel')" icon="pi pi-times" text @click="hideDialog" />
+                <Button :label="$t('common.save')" icon="pi pi-check" @click="saveItem" />
             </template>
         </Dialog>
 
         <!-- Delete Dialog -->
-        <Dialog v-model:visible="deleteItemDialog" :style="{ width: '450px' }" header="Confirm" :modal="true">
+        <Dialog v-model:visible="deleteItemDialog" :style="{ width: '450px' }" :header="$t('common.confirm')" :modal="true">
             <div class="flex items-center gap-4">
                 <i class="pi pi-exclamation-triangle text-3xl!" />
-                <span v-if="item">Are you sure you want to delete <b>{{ item[displayField] }}</b>?</span>
+                <span v-if="item">
+                    <span v-if="confirmDeleteMessage" v-html="confirmDeleteMessage"></span>
+                    <span v-else>Are you sure you want to delete <b>{{ item[displayField] }}</b>?</span>
+                </span>
             </div>
             <template #footer>
-                <Button label="No" icon="pi pi-times" text @click="deleteItemDialog = false" />
-                <Button label="Yes" icon="pi pi-check" @click="deleteItem" />
+                <Button :label="$t('common.no')" icon="pi pi-times" text @click="deleteItemDialog = false" />
+                <Button :label="$t('common.yes')" icon="pi pi-check" @click="deleteItem" />
             </template>
         </Dialog>
 
         <!-- Delete Selected Dialog -->
-        <Dialog v-model:visible="deleteUtilsDialog" :style="{ width: '450px' }" header="Confirm" :modal="true">
+        <Dialog v-model:visible="deleteUtilsDialog" :style="{ width: '450px' }" :header="$t('common.confirm')" :modal="true">
             <div class="flex items-center gap-4">
                 <i class="pi pi-exclamation-triangle text-3xl!" />
-                <span>Are you sure you want to delete the selected items?</span>
+                <span>
+                    <span v-if="confirmDeleteSelectedMessage">{{ confirmDeleteSelectedMessage }}</span>
+                    <span v-else>Are you sure you want to delete the selected items?</span>
+                </span>
             </div>
             <template #footer>
-                <Button label="No" icon="pi pi-times" text @click="deleteUtilsDialog = false" />
-                <Button label="Yes" icon="pi pi-check" text @click="deleteSelectedItems" />
+                <Button :label="$t('common.no')" icon="pi pi-times" text @click="deleteUtilsDialog = false" />
+                <Button :label="$t('common.yes')" icon="pi pi-check" text @click="deleteSelectedItems" />
             </template>
         </Dialog>
     </div>

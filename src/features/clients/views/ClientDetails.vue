@@ -3,6 +3,9 @@ import { supabase } from '@/supabase';
 import { useToast } from 'primevue/usetoast';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+
+const { t, locale } = useI18n();
 
 const route = useRoute();
 const router = useRouter();
@@ -55,7 +58,7 @@ const fetchClientData = async () => {
 
     } catch (error) {
         console.error('Error loading client:', error);
-        toast.add({ severity: 'error', summary: 'Error', detail: 'Could not load client details', life: 3000 });
+        toast.add({ severity: 'error', summary: t('common.error'), detail: t('clients.load_error'), life: 3000 });
         // Optional: router.push('/clients');
     } finally {
         loading.value = false;
@@ -77,7 +80,7 @@ const totalDue = computed(() => {
 
 const formatDate = (dateString) => {
     if (!dateString) return '-';
-    return new Date(dateString).toLocaleDateString('en-US', { 
+    return new Date(dateString).toLocaleDateString(locale.value === 'en' ? 'en-US' : 'es-ES', { 
         year: 'numeric', 
         month: 'long', 
         day: 'numeric' 
@@ -85,7 +88,7 @@ const formatDate = (dateString) => {
 };
 
 const formatCurrency = (value) => {
-    return (value || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    return (value || 0).toLocaleString(locale.value === 'en' ? 'en-US' : 'es-ES', { style: 'currency', currency: 'USD' });
 };
 
 const getStatusSeverity = (status) => {
@@ -109,7 +112,7 @@ const goBack = () => {
     <div v-else class="flex flex-col gap-6 fade-in-up">
         <!-- Header / Actions -->
         <div>
-            <Button label="Back to Clients" icon="pi pi-arrow-left" text @click="goBack" class="mb-4" />
+            <Button :label="$t('clients.back_to_clients')" icon="pi pi-arrow-left" text @click="goBack" class="mb-4" />
             
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 card">
                 <div class="flex items-center gap-4">
@@ -118,12 +121,12 @@ const goBack = () => {
                         <h1 class="text-3xl font-bold m-0">{{ client.name }}</h1>
                         <div class="flex items-center gap-2 mt-2 text-surface-500">
                              <i class="pi pi-calendar"></i>
-                             <span>Client since {{ formatDate(client.created_at) }}</span>
+                             <span>{{ $t('clients.client_since', { date: formatDate(client.created_at) }) }}</span>
                         </div>
                     </div>
                 </div>
                 <div>
-                     <Tag :value="client.status || 'Active'" :severity="getStatusSeverity(client.status)" class="text-base px-4 py-2" rounded />
+                     <Tag :value="$t(`clients.${(client.status || 'Active').toLowerCase()}`)" :severity="getStatusSeverity(client.status)" class="text-base px-4 py-2" rounded />
                 </div>
             </div>
         </div>
@@ -135,7 +138,7 @@ const goBack = () => {
                     <template #title>
                         <div class="flex items-center gap-2">
                             <i class="pi pi-id-card text-primary"></i>
-                            <span>Contact Information</span>
+                            <span>{{ $t('clients.contact_info') }}</span>
                         </div>
                     </template>
                     <template #content>
@@ -145,7 +148,7 @@ const goBack = () => {
                                     <i class="pi pi-envelope text-surface-600"></i>
                                 </span>
                                 <div>
-                                    <span class="block text-sm text-surface-500">Email</span>
+                                    <span class="block text-sm text-surface-500">{{ $t('clients.email') }}</span>
                                     <span class="font-medium word-break">{{ client.email || '-' }}</span>
                                 </div>
                             </li>
@@ -154,7 +157,7 @@ const goBack = () => {
                                     <i class="pi pi-phone text-surface-600"></i>
                                 </span>
                                 <div>
-                                    <span class="block text-sm text-surface-500">Phone</span>
+                                    <span class="block text-sm text-surface-500">{{ $t('clients.phone') }}</span>
                                     <span class="font-medium">{{ client.phone || '-' }}</span>
                                 </div>
                             </li>
@@ -163,7 +166,7 @@ const goBack = () => {
                                     <i class="pi pi-building text-surface-600"></i>
                                 </span>
                                 <div>
-                                    <span class="block text-sm text-surface-500">Company</span>
+                                    <span class="block text-sm text-surface-500">{{ $t('clients.company') }}</span>
                                     <span class="font-medium">{{ client.company || '-' }}</span>
                                 </div>
                             </li>
@@ -178,44 +181,44 @@ const goBack = () => {
                     <template #title>
                         <div class="flex items-center gap-2">
                             <i class="pi pi-chart-line text-primary"></i>
-                            <span>Financial Summary</span>
+                            <span>{{ $t('clients.financial_summary') }}</span>
                         </div>
                     </template>
                     <template #content>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
                             <!-- Total Invoiced -->
                             <div class="surface-ground p-4 rounded-lg flex flex-col gap-2 border border-surface-200">
-                                <span class="text-surface-500 font-medium text-sm">Total Invoiced</span>
+                                <span class="text-surface-500 font-medium text-sm">{{ $t('clients.total_invoiced') }}</span>
                                 <span class="text-2xl font-bold">{{ formatCurrency(totalInvoiced) }}</span>
-                                <span class="text-xs text-surface-500">{{ invoices.length }} invoices generated</span>
+                                <span class="text-xs text-surface-500">{{ $t('clients.invoices_generated', { count: invoices.length }) }}</span>
                             </div>
 
                              <!-- Total Collected -->
                             <div class="surface-ground p-4 rounded-lg flex flex-col gap-2 border border-surface-200">
-                                <span class="text-surface-500 font-medium text-sm">Total Collected</span>
+                                <span class="text-surface-500 font-medium text-sm">{{ $t('clients.total_collected') }}</span>
                                 <span class="text-2xl font-bold text-green-600">{{ formatCurrency(totalPaid) }}</span>
-                                <span class="text-xs text-surface-500">{{ payments.length }} payments received</span>
+                                <span class="text-xs text-surface-500">{{ $t('clients.payments_received', { count: payments.length }) }}</span>
                             </div>
 
                              <!-- Total Due -->
                             <div class="surface-ground p-4 rounded-lg flex flex-col gap-2 border border-surface-200">
-                                <span class="text-surface-500 font-medium text-sm">Outstanding Balance</span>
+                                <span class="text-surface-500 font-medium text-sm">{{ $t('dashboard.outstandingBalance') }}</span>
                                 <span class="text-2xl font-bold" :class="totalDue > 0 ? 'text-red-500' : 'text-surface-900'">
                                     {{ formatCurrency(totalDue) }}
                                 </span>
-                                <span class="text-xs text-surface-500">Pending payment</span>
+                                <span class="text-xs text-surface-500">{{ $t('clients.pending_payment') }}</span>
                             </div>
                         </div>
 
                          <!-- Mini Invoice History (Optional - First 3 items) -->
                          <div class="mt-6" v-if="invoices.length > 0">
-                            <span class="text-lg font-semibold block mb-3">Recent Invoices</span>
+                            <span class="text-lg font-semibold block mb-3">{{ $t('clients.recent_invoices') }}</span>
                             <DataTable :value="invoices.slice(0, 3)" size="small">
-                                <Column field="invoice_number" header="#"></Column>
-                                <Column field="date" header="Date">
+                                <Column field="invoice_number" :header="$t('clients.invoice_number')"></Column>
+                                <Column field="date" :header="$t('clients.date')">
                                     <template #body="{ data }">{{ formatDate(data.date) }}</template>
                                 </Column>
-                                <Column field="total" header="Amount">
+                                <Column field="total" :header="$t('clients.amount')">
                                     <template #body="{ data }">{{ formatCurrency(data.total) }}</template>
                                 </Column>
                             </DataTable>
