@@ -8,7 +8,7 @@ const router = createRouter({
         {
             path: '/login',
             name: 'login',
-            component: () => import('@/app/pages/Login.vue')
+            component: () => import('@/features/auth/pages/Login.vue')
         },
         {
             path: '/dashboard', // Nuevo prefijo para las rutas de la aplicación
