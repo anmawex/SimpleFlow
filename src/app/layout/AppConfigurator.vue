@@ -2,6 +2,7 @@
 import { useLayout } from '@/app/layout/composables/layout';
 import { updatePreset, updateSurfacePalette } from '@primeuix/themes';
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const { layoutConfig, isDarkTheme, changeMenuMode } = useLayout();
 
@@ -15,8 +16,15 @@ const preset = ref(layoutConfig.preset);
 
 const menuMode = ref(layoutConfig.menuMode);
 const menuModeOptions = ref([
-    { label: 'Static', value: 'static' },
-    { label: 'Overlay', value: 'overlay' }
+    { label: 'static', value: 'static' },
+    { label: 'overlay', value: 'overlay' }
+]);
+
+const { locale } = useI18n();
+
+const languageOptions = ref([
+    { label: 'English', value: 'en' },
+    { label: 'Español', value: 'es' }
 ]);
 
 const primaryColors = ref([
@@ -177,7 +185,7 @@ function applyTheme(type, color) {
     >
         <div class="flex flex-col gap-4">
             <div>
-                <span class="text-sm text-muted-color font-semibold">Primary</span>
+                <span class="text-sm text-muted-color font-semibold">{{ $t('configurator.primary') }}</span>
                 <div class="pt-2 flex gap-2 flex-wrap justify-between">
                     <button
                         v-for="primaryColor of primaryColors"
@@ -191,7 +199,7 @@ function applyTheme(type, color) {
                 </div>
             </div>
             <div>
-                <span class="text-sm text-muted-color font-semibold">Surface</span>
+                <span class="text-sm text-muted-color font-semibold">{{ $t('configurator.surface') }}</span>
                 <div class="pt-2 flex gap-2 flex-wrap justify-between">
                     <button
                         v-for="surface of surfaces"
@@ -212,8 +220,12 @@ function applyTheme(type, color) {
                 <SelectButton v-model="preset" @change="onPresetChange" :options="presetOptions" :allowEmpty="false" />
             </div> -->
             <div class="flex flex-col gap-2">
-                <span class="text-sm text-muted-color font-semibold">Menu Mode</span>
-                <SelectButton v-model="menuMode" @change="changeMenuMode" :options="menuModeOptions" :allowEmpty="false" optionLabel="label" optionValue="value" />
+                <span class="text-sm text-muted-color font-semibold">{{ $t('configurator.menuMode') }}</span>
+                <SelectButton v-model="menuMode" @change="changeMenuMode" :options="menuModeOptions" :allowEmpty="false" :optionLabel="(opt) => $t('configurator.' + opt.label)" optionValue="value" />
+            </div>
+            <div class="flex flex-col gap-2">
+                <span class="text-sm text-muted-color font-semibold">{{ $t('configurator.language') }}</span>
+                <SelectButton v-model="locale" :options="languageOptions" :allowEmpty="false" optionLabel="label" optionValue="value" />
             </div>
         </div>
     </div>

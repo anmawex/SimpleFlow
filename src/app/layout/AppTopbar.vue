@@ -3,8 +3,11 @@ import { useLayout } from '@/app/layout/composables/layout';
 import { useAuthStore } from '@/features/auth/store/auth';
 import { useConfirm } from 'primevue/useconfirm';
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import AppConfigurator from './AppConfigurator.vue';
+
+const { locale, t } = useI18n();
 
 const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
 const authStore = useAuthStore();
@@ -12,7 +15,7 @@ const router = useRouter();
 const confirm = useConfirm();
 
 // Obtener información del usuario
-const userEmail = computed(() => authStore.currentUser?.email || 'Usuario');
+const userEmail = computed(() => authStore.currentUser?.email || t('topbar.user'));
 const userInitials = computed(() => {
     const email = authStore.currentUser?.email || '';
     return email.charAt(0).toUpperCase();
@@ -21,11 +24,11 @@ const userInitials = computed(() => {
 // Función para cerrar sesión con confirmación
 const handleLogout = () => {
     confirm.require({
-        message: '¿Estás seguro de que deseas cerrar sesión?',
-        header: 'Confirmar Cierre de Sesión',
+        message: t('topbar.logoutConfirmMessage'),
+        header: t('topbar.logoutConfirmHeader'),
         icon: 'pi pi-exclamation-triangle',
-        rejectLabel: 'Cancelar',
-        acceptLabel: 'Cerrar Sesión',
+        rejectLabel: t('topbar.cancel'),
+        acceptLabel: t('topbar.logout'),
         rejectClass: 'p-button-secondary p-button-outlined',
         acceptClass: 'p-button-danger',
         accept: async () => {
@@ -103,9 +106,9 @@ const handleLogout = () => {
                     </div>
                     
                     <!-- Botón de Logout -->
-                    <button type="button" class="layout-topbar-action" @click="handleLogout" title="Cerrar sesión">
+                    <button type="button" class="layout-topbar-action" @click="handleLogout" :title="$t('topbar.logout')">
                         <i class="pi pi-sign-out"></i>
-                        <span>Cerrar Sesión</span>
+                        <span>{{ $t('topbar.logout') }}</span>
                     </button>
                 </div>
             </div>

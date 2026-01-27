@@ -1,0 +1,26 @@
+{
+    "menu": {
+        "home": "Home",
+        "dashboard": "Dashboard",
+        "clients": "Clients",
+        "invoices": "Invoices",
+        "payments": "Payments",
+        "getStarted": "Get Started",
+        "documentation": "Documentation"
+    },
+    "configurator": {
+        "primary": "Primary",
+        "surface": "Surface",
+        "menuMode": "Menu Mode",
+        "language": "Language",
+        "static": "Static",
+        "overlay": "Overlay"
+    },
+    "topbar": {
+        "logout": "Log Out",
+        "logoutConfirmMessage": "Are you sure you want to log out?",
+        "logoutConfirmHeader": "Confirm Log Out",
+        "cancel": "Cancel",
+        "user": "User"
+    }
+}

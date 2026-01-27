@@ -1,0 +1,26 @@
+{
+    "menu": {
+        "home": "Inicio",
+        "dashboard": "Panel de Control",
+        "clients": "Clientes",
+        "invoices": "Facturas",
+        "payments": "Pagos",
+        "getStarted": "Comenzar",
+        "documentation": "Documentación"
+    },
+    "configurator": {
+        "primary": "Primario",
+        "surface": "Superficie",
+        "menuMode": "Modo de Menú",
+        "language": "Idioma",
+        "static": "Estático",
+        "overlay": "Superposición"
+    },
+    "topbar": {
+        "logout": "Cerrar Sesión",
+        "logoutConfirmMessage": "¿Estás seguro de que deseas cerrar sesión?",
+        "logoutConfirmHeader": "Confirmar Cierre de Sesión",
+        "cancel": "Cancelar",
+        "user": "Usuario"
+    }
+}
