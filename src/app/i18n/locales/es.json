@@ -184,16 +184,50 @@
     },
     "footer": {
         "text": "SEIKYU © 2026",
-        "by": "Hecho con ❤️ por",
+        "by": "Desarrollado por",
         "rights": "Todos los derechos reservados.",
-        "company": "Empresa",
+        "developer": "Desarrollador",
         "resources": "Recursos",
-        "community": "Comunidad",
         "legal": "Legal",
-        "about": "Sobre Nosotros",
-        "contact": "Contacto",
+        "portfolio": "Portafolio",
+        "linkedin": "LinkedIn",
+        "github": "GitHub",
         "privacy": "Política de Privacidad",
         "terms": "Términos de Servicio"
+    },
+    "privacy": {
+        "title": "Política de Privacidad",
+        "lastUpdated": "Última actualización: Enero 2026",
+        "intro": "En SEIKYU, nos tomamos muy en serio tu privacidad. Este documento explica qué datos recopilamos y cómo los utilizamos.",
+        "collection": {
+            "title": "Recopilación de Datos",
+            "content": "Solo recopilamos la información necesaria para proporcionar nuestros servicios, incluyendo tu correo electrónico y detalles de cuenta para la autenticación a través de Supabase."
+        },
+        "usage": {
+            "title": "Uso de Datos",
+            "content": "Tus datos se utilizan únicamente para gestionar tus facturas, clientes y pagos dentro de la aplicación. No vendemos tus datos a terceros."
+        },
+        "security": {
+            "title": "Seguridad",
+            "content": "Utilizamos seguridad de nivel empresarial proporcionada por Supabase y cifrado estándar de la industria para proteger tu información financiera."
+        }
+    },
+    "terms": {
+        "title": "Términos de Servicio",
+        "lastUpdated": "Última actualización: Enero 2026",
+        "overview": "Al utilizar SEIKYU, aceptas los siguientes términos.",
+        "usage": {
+            "title": "Uso de la Aplicación",
+            "content": "SEIKYU es una herramienta de gestión financiera. Eres responsable de la exactitud de los datos que ingresas."
+        },
+        "beta": {
+            "title": "Estado Beta MVP",
+            "content": "Esta aplicación se encuentra actualmente en Beta MVP. Aunque nos esforzamos por la estabilidad, el servicio se proporciona 'tal cual' sin garantías."
+        },
+        "account": {
+            "title": "Responsabilidad de la Cuenta",
+            "content": "Eres responsable de mantener la confidencialidad de tus credenciales de acceso."
+        }
     },
     "landing": {
         "hero": {

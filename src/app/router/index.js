@@ -181,9 +181,19 @@ const router = createRouter({
             component: () => import('@/features/auth/pages/Access.vue')
         },
         {
-            path: '/auth/error',
-            name: 'error',
-            component: () => import('@/features/auth/pages/Error.vue')
+            "path": "/privacy",
+            "name": "privacy",
+            "component": () => import("@/app/pages/PrivacyPolicy.vue")
+        },
+        {
+            "path": "/terms",
+            "name": "terms",
+            "component": () => import("@/app/pages/TermsOfService.vue")
+        },
+        {
+            "path": "/auth/error",
+            "name": "error",
+            "component": () => import("@/features/auth/pages/Error.vue")
         }
     ]
 });

@@ -28,28 +28,23 @@ const { t } = useI18n();
 
             <div class="col-span-12 md:col-span-10">
                 <div class="grid grid-cols-12 gap-8 text-center md:text-left">
-                    <div class="col-span-12 md:col-span-3">
-                        <h4 class="font-medium text-2xl leading-normal mb-4 text-surface-900 dark:text-surface-0">{{ t('footer.company') }}</h4>
-                        <a class="leading-normal text-xl block cursor-pointer mb-2 text-surface-700 dark:text-surface-100">{{ t('footer.about') }}</a>
-                        <a class="leading-normal text-xl block cursor-pointer mb-2 text-surface-700 dark:text-surface-100">{{ t('footer.contact') }}</a>
+                    <div class="col-span-12 md:col-span-4">
+                        <h4 class="font-medium text-2xl leading-normal mb-4 text-surface-900 dark:text-surface-0">{{ t('footer.developer') }}</h4>
+                        <!-- Deja campo abierto para tus contactos -->
+                        <a href="#" target="_blank" class="leading-normal text-xl block cursor-pointer mb-2 text-surface-700 dark:text-surface-100">{{ t('footer.portfolio') }}</a>
+                        <a href="#" target="_blank" class="leading-normal text-xl block cursor-pointer mb-2 text-surface-700 dark:text-surface-100">{{ t('footer.linkedin') }}</a>
+                        <a href="#" target="_blank" class="leading-normal text-xl block cursor-pointer mb-2 text-surface-700 dark:text-surface-100">{{ t('footer.github') }}</a>
                     </div>
 
-                    <div class="col-span-12 md:col-span-3">
+                    <div class="col-span-12 md:col-span-4">
                         <h4 class="font-medium text-2xl leading-normal mb-4 text-surface-900 dark:text-surface-0">{{ t('footer.resources') }}</h4>
-                        <a class="leading-normal text-xl block cursor-pointer mb-2 text-surface-700 dark:text-surface-100">{{ t('menu.getStarted') }}</a>
                         <a class="leading-normal text-xl block cursor-pointer mb-2 text-surface-700 dark:text-surface-100">{{ t('menu.documentation') }}</a>
                     </div>
 
-                    <div class="col-span-12 md:col-span-3">
-                        <h4 class="font-medium text-2xl leading-normal mb-4 text-surface-900 dark:text-surface-0">{{ t('footer.community') }}</h4>
-                        <a class="leading-normal text-xl block cursor-pointer mb-2 text-surface-700 dark:text-surface-100">Discord</a>
-                        <a class="leading-normal text-xl block cursor-pointer mb-2 text-surface-700 dark:text-surface-100">FAQ</a>
-                    </div>
-
-                    <div class="col-span-12 md:col-span-3">
+                    <div class="col-span-12 md:col-span-4">
                         <h4 class="font-medium text-2xl leading-normal mb-4 text-surface-900 dark:text-surface-0">{{ t('footer.legal') }}</h4>
-                        <a class="leading-normal text-xl block cursor-pointer mb-2 text-surface-700 dark:text-surface-100">{{ t('footer.privacy') }}</a>
-                        <a class="leading-normal text-xl block cursor-pointer text-surface-700 dark:text-surface-100">{{ t('footer.terms') }}</a>
+                        <router-link to="/privacy" class="leading-normal text-xl block cursor-pointer mb-2 text-surface-700 dark:text-surface-100">{{ t('footer.privacy') }}</router-link>
+                        <router-link to="/terms" class="leading-normal text-xl block cursor-pointer text-surface-700 dark:text-surface-100">{{ t('footer.terms') }}</router-link>
                     </div>
                 </div>
             </div>

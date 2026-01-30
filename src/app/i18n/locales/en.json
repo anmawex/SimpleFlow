@@ -184,16 +184,50 @@
     },
     "footer": {
         "text": "SEIKYU © 2026",
-        "by": "Made with ❤️ by",
+        "by": "Developed by",
         "rights": "All rights reserved.",
-        "company": "Company",
+        "developer": "Developer",
         "resources": "Resources",
-        "community": "Community",
         "legal": "Legal",
-        "about": "About Us",
-        "contact": "Contact",
+        "portfolio": "Portfolio",
+        "linkedin": "LinkedIn",
+        "github": "GitHub",
         "privacy": "Privacy Policy",
         "terms": "Terms of Service"
+    },
+    "privacy": {
+        "title": "Privacy Policy",
+        "lastUpdated": "Last Updated: January 2026",
+        "intro": "At SEIKYU, we take your privacy seriously. This document explains what data we collect and how we use it.",
+        "collection": {
+            "title": "Data Collection",
+            "content": "We collect only the necessary information to provide our services, including your email and account details for authentication via Supabase."
+        },
+        "usage": {
+            "title": "Data Usage",
+            "content": "Your data is used solely to manage your invoices, clients, and payments within the application. We do not sell your data to third parties."
+        },
+        "security": {
+            "title": "Security",
+            "content": "We use enterprise-grade security provided by Supabase and industry-standard encryption to protect your financial information."
+        }
+    },
+    "terms": {
+        "title": "Terms of Service",
+        "lastUpdated": "Last Updated: January 2026",
+        "overview": "By using SEIKYU, you agree to the following terms.",
+        "usage": {
+            "title": "Application Use",
+            "content": "SEIKYU is a financial management tool. You are responsible for the accuracy of the data you enter."
+        },
+        "beta": {
+            "title": "MVP Beta Status",
+            "content": "This application is currently in MVP Beta. While we strive for stability, the service is provided 'as is' without warranties."
+        },
+        "account": {
+            "title": "Account Responsibility",
+            "content": "You are responsible for maintaining the confidentiality of your account credentials."
+        }
     },
     "landing": {
         "hero": {
