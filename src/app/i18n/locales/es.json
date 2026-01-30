@@ -6,7 +6,9 @@
         "invoices": "Facturas",
         "payments": "Pagos",
         "getStarted": "Comenzar",
-        "documentation": "Documentación"
+        "documentation": "Documentación",
+        "login": "Iniciar Sesión",
+        "register": "Registrarse"
     },
     "configurator": {
         "primary": "Primario",
@@ -183,7 +185,87 @@
     "footer": {
         "text": "SEIKYU © 2026",
         "by": "Hecho con ❤️ por",
-        "rights": "Todos los derechos reservados."
+        "rights": "Todos los derechos reservados.",
+        "company": "Empresa",
+        "resources": "Recursos",
+        "community": "Comunidad",
+        "legal": "Legal",
+        "about": "Sobre Nosotros",
+        "contact": "Contacto",
+        "privacy": "Política de Privacidad",
+        "terms": "Términos de Servicio"
+    },
+    "landing": {
+        "hero": {
+            "title": "Optimiza tu Negocio con",
+            "subtitle": "SEIKYU",
+            "description": "La solución minimalista y potente para gestionar tus clientes, facturas y pagos sin complicaciones.",
+            "getStarted": "Comenzar",
+            "learnMore": "Saber más"
+        },
+        "features": {
+            "title": "¿Por qué elegir SEIKYU?",
+            "subtitle": "Todo lo que necesitas para gestionar las finanzas de tu negocio en un solo lugar.",
+            "clients": {
+                "title": "Gestión de Clientes",
+                "desc": "Mantén un seguimiento de todos tus clientes y su información de contacto en un CRM centralizado."
+            },
+            "invoices": {
+                "title": "Facturación Inteligente",
+                "desc": "Crea, envía y rastrea facturas profesionales con estados personalizados y fechas de vencimiento."
+            },
+            "payments": {
+                "title": "Seguimiento de Pagos",
+                "desc": "Registra pagos, gestiona montos parciales y monitorea tus ingresos totales en tiempo real."
+            },
+            "dashboard": {
+                "title": "Perspectivas Financieras",
+                "desc": "Obtén una visión general del rendimiento de tu negocio con gráficos y métricas interactivas."
+            },
+            "security": {
+                "title": "Seguro y Confiable",
+                "desc": "Tus datos están protegidos con seguridad de nivel empresarial y autenticación moderna."
+            },
+            "ui": {
+                "title": "UI/UX Moderna",
+                "desc": "Disfruta de una interfaz limpia y receptiva que funciona perfectamente en escritorio y móvil."
+            }
+        },
+        "highlights": {
+            "title": "Diseñado para Crecer",
+            "subtitle": "Herramientas financieras escalables y eficientes para autónomos y pequeñas empresas.",
+            "one": {
+                "title": "Flujos de Trabajo Automatizados",
+                "desc": "Reduce la entrada manual y errores humanos con seguimiento de saldo y actualizaciones de estado automatizadas."
+            },
+            "two": {
+                "title": "Sincronización en Tiempo Real",
+                "desc": "Accede a tus datos desde cualquier lugar, con sincronización instantánea en todos tus dispositivos."
+            }
+        },
+        "pricing": {
+            "title": "Acceso Beta y Soluciones a Medida",
+            "subtitle": "Sé parte de la etapa inicial o solicita un sistema adaptado a tus necesidades.",
+            "beta": {
+                "title": "Beta SEIKYU",
+                "price": "Gratis",
+                "period": "durante periodo de prueba",
+                "features": ["Acceso total a todos los módulos MVP", "Clientes y facturas ilimitadas", "Canal directo de retroalimentación", "Actualizaciones futuras automáticas"]
+            },
+            "custom": {
+                "title": "SEIKYU a Medida",
+                "price": "Personalizado",
+                "period": "según tus requerimientos",
+                "features": ["Desarrollo de funciones específicas", "Instancia privada dedicada", "Incluye acceso a la Beta MVP", "Soporte prioritario 24/7"]
+            }
+        },
+        "testimonials": {
+            "one": {
+                "name": "Alex Rivera",
+                "company": "Rivera Tech Solutions",
+                "text": "SEIKYU ha transformado completamente la forma en que gestiono mi negocio independiente. Ahora puedo generar facturas en segundos y ver cómo crecen mis ingresos mensuales sin perderme en hojas de cálculo."
+            }
+        }
     },
     "docs": {
         "title": "Proyecto SEIKYU",

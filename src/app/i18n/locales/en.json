@@ -6,7 +6,9 @@
         "invoices": "Invoices",
         "payments": "Payments",
         "getStarted": "Get Started",
-        "documentation": "Documentation"
+        "documentation": "Documentation",
+        "login": "Login",
+        "register": "Register"
     },
     "configurator": {
         "primary": "Primary",
@@ -183,7 +185,87 @@
     "footer": {
         "text": "SEIKYU © 2026",
         "by": "Made with ❤️ by",
-        "rights": "All rights reserved."
+        "rights": "All rights reserved.",
+        "company": "Company",
+        "resources": "Resources",
+        "community": "Community",
+        "legal": "Legal",
+        "about": "About Us",
+        "contact": "Contact",
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Service"
+    },
+    "landing": {
+        "hero": {
+            "title": "Streamline Your Business with",
+            "subtitle": "SEIKYU",
+            "description": "The minimalist, powerful solution for managing your clients, invoices, and payments without the headache.",
+            "getStarted": "Get Started",
+            "learnMore": "Learn More"
+        },
+        "features": {
+            "title": "Why Choose SEIKYU?",
+            "subtitle": "Everything you need to manage your business's finances in one place.",
+            "clients": {
+                "title": "Client Management",
+                "desc": "Keep track of all your clients and their contact information in a centralized CRM."
+            },
+            "invoices": {
+                "title": "Smart Invoicing",
+                "desc": "Create, send, and track professional invoices with custom statuses and due dates."
+            },
+            "payments": {
+                "title": "Payment Tracking",
+                "desc": "Record payments, handle partial amounts, and monitor your total revenue in real-time."
+            },
+            "dashboard": {
+                "title": "Financial Insights",
+                "desc": "Get a bird's-eye view of your business performance with interactive charts and metrics."
+            },
+            "security": {
+                "title": "Secure & Reliable",
+                "desc": "Your data is protected with enterprise-grade security and modern authentication."
+            },
+            "ui": {
+                "title": "Modern UI/UX",
+                "desc": "Enjoy a clean, responsive interface that works perfectly on desktop and mobile."
+            }
+        },
+        "highlights": {
+            "title": "Built for Growth",
+            "subtitle": "Scalable and efficient financial tools for freelancers and small businesses.",
+            "one": {
+                "title": "Automated Workflows",
+                "desc": "Reduce manual entry and human error with automated balance tracking and status updates."
+            },
+            "two": {
+                "title": "Real-time Sync",
+                "desc": "Access your data from anywhere, with instant synchronization across all your devices."
+            }
+        },
+        "pricing": {
+            "title": "MVP Access & Custom Solutions",
+            "subtitle": "Be part of the early stage or get a tailored system for your needs.",
+            "beta": {
+                "title": "SEIKYU Beta",
+                "price": "Free",
+                "period": "during test period",
+                "features": ["Full access to all MVP modules", "Unlimited clients & invoices", "Direct feedback channel", "Automated future upgrades"]
+            },
+            "custom": {
+                "title": "Custom SEIKYU",
+                "price": "Tailored",
+                "period": "to your needs",
+                "features": ["Bespoke feature development", "Dedicated private instance", "Includes Early Beta access", "24/7 Priority support"]
+            }
+        },
+        "testimonials": {
+            "one": {
+                "name": "Alex Rivera",
+                "company": "Rivera Tech Solutions",
+                "text": "SEIKYU has completely transformed how I handle my freelance business. I can now generate invoices in seconds and see my monthly revenue grow without getting lost in spreadsheets."
+            }
+        }
     },
     "docs": {
         "title": "SEIKYU Project",
