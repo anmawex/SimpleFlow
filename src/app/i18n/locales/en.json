@@ -193,7 +193,8 @@
         "linkedin": "LinkedIn",
         "github": "GitHub",
         "privacy": "Privacy Policy",
-        "terms": "Terms of Service"
+        "terms": "Terms of Service",
+        "contact": "Contact"
     },
     "privacy": {
         "title": "Privacy Policy",
@@ -264,6 +265,10 @@
                 "title": "Modern UI/UX",
                 "desc": "Enjoy a clean, responsive interface that works perfectly on desktop and mobile."
             }
+        },
+        "accessModal": {
+            "header": "Join the SEIKYU Beta",
+            "message": "Thank you for your interest! We are currently in an exclusive MVP Beta phase. To ensure the best experience, access is restricted to authorized users. Please select one of the two options below (SEIKYU Beta or Custom SEIKYU) to request your credentials directly from the developer through our contact channels."
         },
         "highlights": {
             "title": "Built for Growth",

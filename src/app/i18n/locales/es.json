@@ -193,7 +193,8 @@
         "linkedin": "LinkedIn",
         "github": "GitHub",
         "privacy": "Política de Privacidad",
-        "terms": "Términos de Servicio"
+        "terms": "Términos de Servicio",
+        "contact": "Contacto"
     },
     "privacy": {
         "title": "Política de Privacidad",
@@ -264,6 +265,10 @@
                 "title": "UI/UX Moderna",
                 "desc": "Disfruta de una interfaz limpia y receptiva que funciona perfectamente en escritorio y móvil."
             }
+        },
+        "accessModal": {
+            "header": "Únete a la Beta de SEIKYU",
+            "message": "¡Gracias por tu interés! Actualmente nos encontramos en una fase exclusiva de Beta MVP. Para garantizar la mejor experiencia, el acceso está restringido a usuarios autorizados. Por favor, selecciona una de las dos opciones a continuación (Beta SEIKYU o SEIKYU a Medida) para solicitar tus credenciales directamente al desarrollador mediante nuestros canales de contacto."
         },
         "highlights": {
             "title": "Diseñado para Crecer",

@@ -27,7 +27,7 @@ const planImages = {
                             <span class="text-5xl font-bold text-primary">{{ t(`landing.pricing.${plan}.price`) }}</span>
                             <span class="text-surface-600 dark:text-surface-200 mt-1">{{ t(`landing.pricing.${plan}.period`) }}</span>
                         </div>
-                        <Button :label="plan === 'beta' ? t('menu.getStarted') : t('footer.contact')" as="router-link" :to="plan === 'beta' ? '/login' : '#'" class="p-button-rounded border-0 font-light leading-tight bg-primary text-white px-6 py-3 mt-4"></Button>
+                        <Button :label="plan === 'beta' ? t('menu.getStarted') : t('footer.contact')" as="a" :href="plan === 'beta' ? '/login' : 'https://www.linkedin.com/in/angelcordero1003/'" :target="plan === 'beta' ? '_self' : '_blank'" class="p-button-rounded border-0 font-light leading-tight bg-primary text-white px-6 py-3 mt-4"></Button>
                     </div>
                     <Divider class="w-full bg-surface-200"></Divider>
                     <ul class="my-8 list-none p-0 flex text-surface-900 dark:text-surface-0 flex-col px-8">
