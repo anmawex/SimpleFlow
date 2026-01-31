@@ -282,6 +282,10 @@
                 "desc": "Accede a tus datos desde cualquier lugar, con sincronización instantánea en todos tus dispositivos."
             }
         },
+        "contactModal": {
+            "header": "Siguientes Pasos para el Acceso",
+            "message": "Para ofrecerte la mejor experiencia con SEIKYU, ahora procederemos a enviar un correo al desarrollador. Esto te permitirá:\n\n1. Agendar una llamada introductoria personalizada.\n2. Recibir tus credenciales oficiales de acceso.\n3. Solicitar un tutorial guiado sobre cómo usar SEIKYU de forma efectiva.\n\n¿Estás listo para comenzar?"
+        },
         "pricing": {
             "title": "Acceso Beta y Soluciones a Medida",
             "subtitle": "Sé parte de la etapa inicial o solicita un sistema adaptado a tus necesidades.",
@@ -304,6 +308,11 @@
                 "company": "Rivera Tech Solutions",
                 "text": "SEIKYU ha transformado completamente la forma en que gestiono mi negocio independiente. Ahora puedo generar facturas en segundos y ver cómo crecen mis ingresos mensuales sin perderme en hojas de cálculo."
             }
+        },
+        "email": {
+            "betaSubject": "Solicitud de Acceso - SEIKYU Beta",
+            "customSubject": "Consulta Software a Medida - SEIKYU",
+            "body": "Hola Angel,%0D%0A%0D%0AMe gustaría agendar una reunión para solicitar las credenciales de acceso a SEIKYU y recibir la guía de uso del sistema.%0D%0A%0D%0AQuedo atento a tu respuesta."
         }
     },
     "docs": {

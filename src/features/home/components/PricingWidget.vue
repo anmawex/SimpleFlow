@@ -1,13 +1,33 @@
 <script setup>
+import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t, tm, rt } = useI18n();
+
+const showContactModal = ref(false);
+const selectedPlan = ref(null);
 
 const plans = ['beta', 'custom'];
 const planImages = {
     beta: '/demo/images/landing/free.svg',
     custom: '/demo/images/landing/enterprise.svg'
 };
+
+function openContactModal(plan) {
+    selectedPlan.value = plan;
+    showContactModal.value = true;
+}
+
+function confirmContact() {
+    const email = 'angelcordero1003@gmail.com';
+    const plan = selectedPlan.value;
+    const subject = plan === 'beta' ? t('landing.email.betaSubject') : t('landing.email.customSubject');
+    const body = t('landing.email.body');
+    
+    const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
+    window.open(mailtoLink, '_blank');
+    showContactModal.value = false;
+}
 </script>
 
 <template>
@@ -27,7 +47,7 @@ const planImages = {
                             <span class="text-5xl font-bold text-primary">{{ t(`landing.pricing.${plan}.price`) }}</span>
                             <span class="text-surface-600 dark:text-surface-200 mt-1">{{ t(`landing.pricing.${plan}.period`) }}</span>
                         </div>
-                        <Button :label="plan === 'beta' ? t('menu.getStarted') : t('footer.contact')" as="a" :href="plan === 'beta' ? '/login' : 'https://www.linkedin.com/in/angelcordero1003/'" :target="plan === 'beta' ? '_self' : '_blank'" class="p-button-rounded border-0 font-light leading-tight bg-primary text-white px-6 py-3 mt-4"></Button>
+                        <Button :label="plan === 'beta' ? t('menu.getStarted') : t('footer.contact')" @click="openContactModal(plan)" class="p-button-rounded border-0 font-light leading-tight bg-primary text-white px-6 py-3 mt-4"></Button>
                     </div>
                     <Divider class="w-full bg-surface-200"></Divider>
                     <ul class="my-8 list-none p-0 flex text-surface-900 dark:text-surface-0 flex-col px-8">
@@ -39,5 +59,17 @@ const planImages = {
                 </div>
             </div>
         </div>
+
+        <Dialog v-model:visible="showContactModal" modal :header="t('landing.contactModal.header')" :style="{ width: '35rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+            <div class="flex flex-col gap-4">
+                <p class="text-surface-600 dark:text-surface-200 text-lg leading-relaxed whitespace-pre-line">
+                    {{ t('landing.contactModal.message') }}
+                </p>
+                <div class="flex justify-end gap-3 mt-4">
+                    <Button type="button" :label="t('common.cancel')" severity="secondary" @click="showContactModal = false" class="px-6"></Button>
+                    <Button type="button" :label="t('common.confirm')" @click="confirmContact" class="px-6"></Button>
+                </div>
+            </div>
+        </Dialog>
     </div>
 </template>

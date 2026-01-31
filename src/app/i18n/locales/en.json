@@ -282,6 +282,10 @@
                 "desc": "Access your data from anywhere, with instant synchronization across all your devices."
             }
         },
+        "contactModal": {
+            "header": "Next Steps to Get Access",
+            "message": "To provide the best experience with SEIKYU, we will now proceed to send an email to the developer. This will allow you to:\n\n1. Schedule a personalized introductory call.\n2. Receive your official access credentials.\n3. Request a guided tutorial on how to use SEIKYU effectively.\n\nReady to get started?"
+        },
         "pricing": {
             "title": "MVP Access & Custom Solutions",
             "subtitle": "Be part of the early stage or get a tailored system for your needs.",
@@ -304,6 +308,11 @@
                 "company": "Rivera Tech Solutions",
                 "text": "SEIKYU has completely transformed how I handle my freelance business. I can now generate invoices in seconds and see my monthly revenue grow without getting lost in spreadsheets."
             }
+        },
+        "email": {
+            "betaSubject": "Access Request - SEIKYU Beta",
+            "customSubject": "Custom Software Inquiry - SEIKYU",
+            "body": "Hi Angel,%0D%0A%0D%0AI would like to schedule a call to request access credentials for SEIKYU and receive the software usage guide.%0D%0A%0D%0ALooking forward to hearing from you."
         }
     },
     "docs": {
