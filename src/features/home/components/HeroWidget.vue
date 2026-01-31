@@ -24,7 +24,7 @@ const { t } = useI18n();
             </div>
         </div>
         <div class="flex justify-center md:justify-end">
-            <img src="/demo/images/landing/screen-1.png" alt="Hero Image" class="w-9/12 md:w-auto" />
+            <img src="/demo/images/landing/screen-1.png" alt="Hero Image" class="w-9/12" />
         </div>
     </div>
 </template>
