@@ -16,8 +16,8 @@ const props = defineProps({
     showEdit: { type: Boolean, default: true },
     showDelete: { type: Boolean, default: true },
     manualClose: { type: Boolean, default: false },
-    confirmDeleteMessage: { type: String, default: null }, // Opcional: mensaje personalizado
-    confirmDeleteSelectedMessage: { type: String, default: null } // Opcional: mensaje personalizado
+    confirmDeleteMessage: { type: [String, Function], default: null }, // Opcional: mensaje personalizado
+    confirmDeleteSelectedMessage: { type: [String, Function], default: null } // Opcional: mensaje personalizado
 });
 
 const emit = defineEmits(['save', 'delete', 'delete-selected']);
@@ -191,7 +191,10 @@ function exportCSV() {
             <div class="flex items-center gap-4">
                 <i class="pi pi-exclamation-triangle text-3xl!" />
                 <span v-if="item">
-                    <span v-if="confirmDeleteMessage" v-html="confirmDeleteMessage"></span>
+                    <span v-if="confirmDeleteMessage">
+                        <span v-if="typeof confirmDeleteMessage === 'function'" v-html="confirmDeleteMessage(item)"></span>
+                        <span v-else v-html="confirmDeleteMessage"></span>
+                    </span>
                     <span v-else>Are you sure you want to delete <b>{{ item[displayField] }}</b>?</span>
                 </span>
             </div>
@@ -206,7 +209,10 @@ function exportCSV() {
             <div class="flex items-center gap-4">
                 <i class="pi pi-exclamation-triangle text-3xl!" />
                 <span>
-                    <span v-if="confirmDeleteSelectedMessage">{{ confirmDeleteSelectedMessage }}</span>
+                    <span v-if="confirmDeleteSelectedMessage">
+                        <span v-if="typeof confirmDeleteSelectedMessage === 'function'" v-html="confirmDeleteSelectedMessage(selectedItems)"></span>
+                        <span v-else v-html="confirmDeleteSelectedMessage"></span>
+                    </span>
                     <span v-else>Are you sure you want to delete the selected items?</span>
                 </span>
             </div>

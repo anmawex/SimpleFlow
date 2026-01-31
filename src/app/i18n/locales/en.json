@@ -6,7 +6,9 @@
         "invoices": "Invoices",
         "payments": "Payments",
         "getStarted": "Get Started",
-        "documentation": "Documentation"
+        "documentation": "Documentation",
+        "login": "Login",
+        "register": "Register"
     },
     "configurator": {
         "primary": "Primary",
@@ -182,8 +184,137 @@
     },
     "footer": {
         "text": "SEIKYU © 2026",
-        "by": "Made with ❤️ by",
-        "rights": "All rights reserved."
+        "by": "Developed by",
+        "rights": "All rights reserved.",
+        "developer": "Developer",
+        "resources": "Resources",
+        "legal": "Legal",
+        "portfolio": "Portfolio",
+        "linkedin": "LinkedIn",
+        "github": "GitHub",
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Service",
+        "contact": "Contact",
+        "inProgress": "Documentation in progress..."
+    },
+    "privacy": {
+        "title": "Privacy Policy",
+        "lastUpdated": "Last Updated: January 2026",
+        "intro": "At SEIKYU, we take your privacy seriously. This document explains what data we collect and how we use it.",
+        "collection": {
+            "title": "Data Collection",
+            "content": "We collect only the necessary information to provide our services, including your email and account details for authentication via Supabase."
+        },
+        "usage": {
+            "title": "Data Usage",
+            "content": "Your data is used solely to manage your invoices, clients, and payments within the application. We do not sell your data to third parties."
+        },
+        "security": {
+            "title": "Security",
+            "content": "We use enterprise-grade security provided by Supabase and industry-standard encryption to protect your financial information."
+        }
+    },
+    "terms": {
+        "title": "Terms of Service",
+        "lastUpdated": "Last Updated: January 2026",
+        "overview": "By using SEIKYU, you agree to the following terms.",
+        "usage": {
+            "title": "Application Use",
+            "content": "SEIKYU is a financial management tool. You are responsible for the accuracy of the data you enter."
+        },
+        "beta": {
+            "title": "MVP Beta Status",
+            "content": "This application is currently in MVP Beta. While we strive for stability, the service is provided 'as is' without warranties."
+        },
+        "account": {
+            "title": "Account Responsibility",
+            "content": "You are responsible for maintaining the confidentiality of your account credentials."
+        }
+    },
+    "landing": {
+        "hero": {
+            "title": "Streamline Your Business with",
+            "subtitle": "SEIKYU",
+            "description": "The minimalist, powerful solution for managing your clients, invoices, and payments without the headache.",
+            "getStarted": "Get Started",
+            "learnMore": "Learn More"
+        },
+        "features": {
+            "title": "Why Choose SEIKYU?",
+            "subtitle": "Everything you need to manage your business's finances in one place.",
+            "clients": {
+                "title": "Client Management",
+                "desc": "Keep track of all your clients and their contact information in a centralized CRM."
+            },
+            "invoices": {
+                "title": "Smart Invoicing",
+                "desc": "Create, send, and track professional invoices with custom statuses and due dates."
+            },
+            "payments": {
+                "title": "Payment Tracking",
+                "desc": "Record payments, handle partial amounts, and monitor your total revenue in real-time."
+            },
+            "dashboard": {
+                "title": "Financial Insights",
+                "desc": "Get a bird's-eye view of your business performance with interactive charts and metrics."
+            },
+            "security": {
+                "title": "Secure & Reliable",
+                "desc": "Your data is protected with enterprise-grade security and modern authentication."
+            },
+            "ui": {
+                "title": "Modern UI/UX",
+                "desc": "Enjoy a clean, responsive interface that works perfectly on desktop and mobile."
+            }
+        },
+        "accessModal": {
+            "header": "Join the SEIKYU Beta",
+            "message": "Thank you for your interest! We are currently in an exclusive MVP Beta phase. To ensure the best experience, access is restricted to authorized users. Please select one of the two options below (SEIKYU Beta or Custom SEIKYU) to request your credentials directly from the developer through our contact channels."
+        },
+        "highlights": {
+            "title": "Built for Growth",
+            "subtitle": "Scalable and efficient financial tools for freelancers and small businesses.",
+            "one": {
+                "title": "Automated Workflows",
+                "desc": "Reduce manual entry and human error with automated balance tracking and status updates."
+            },
+            "two": {
+                "title": "Real-time Sync",
+                "desc": "Access your data from anywhere, with instant synchronization across all your devices."
+            }
+        },
+        "contactModal": {
+            "header": "Next Steps to Get Access",
+            "message": "To provide the best experience with SEIKYU, we will now proceed to send an email to the developer. This will allow you to:\n\n1. Schedule a personalized introductory call.\n2. Receive your official access credentials.\n3. Request a guided tutorial on how to use SEIKYU effectively.\n\nReady to get started?"
+        },
+        "pricing": {
+            "title": "MVP Access & Custom Solutions",
+            "subtitle": "Be part of the early stage or get a tailored system for your needs.",
+            "beta": {
+                "title": "SEIKYU Beta",
+                "price": "Free",
+                "period": "during test period",
+                "features": ["Full access to all MVP modules", "Unlimited clients & invoices", "Direct feedback channel", "Automated future upgrades"]
+            },
+            "custom": {
+                "title": "Custom SEIKYU",
+                "price": "Tailored",
+                "period": "to your needs",
+                "features": ["Bespoke feature development", "Dedicated private instance", "Includes Early Beta access", "24/7 Priority support"]
+            }
+        },
+        "testimonials": {
+            "one": {
+                "name": "Alex Rivera",
+                "company": "Rivera Tech Solutions",
+                "text": "SEIKYU has completely transformed how I handle my freelance business. I can now generate invoices in seconds and see my monthly revenue grow without getting lost in spreadsheets."
+            }
+        },
+        "email": {
+            "betaSubject": "Access Request - SEIKYU Beta",
+            "customSubject": "Custom Software Inquiry - SEIKYU",
+            "body": "Hi Angel,%0D%0A%0D%0AI would like to schedule a call to request access credentials for SEIKYU and receive the software usage guide.%0D%0A%0D%0ALooking forward to hearing from you."
+        }
     },
     "docs": {
         "title": "SEIKYU Project",
