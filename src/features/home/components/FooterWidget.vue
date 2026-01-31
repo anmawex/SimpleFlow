@@ -31,22 +31,22 @@ const { t } = useI18n();
                     <div class="col-span-12 md:col-span-4">
                         <h4 class="font-medium text-2xl leading-normal mb-4 text-surface-900 dark:text-surface-0">{{ t('footer.developer') }}</h4>
                         <!-- Deja campo abierto para tus contactos -->
-                        <a href="https://anmawex.vercel.app" target="_blank" class="leading-normal text-xl block cursor-pointer mb-2 text-surface-700 dark:text-surface-100">{{ t('footer.portfolio') }}</a>
-                        <a href="https://www.linkedin.com/in/angelcordero1003/" target="_blank" class="leading-normal text-xl block cursor-pointer mb-2 text-surface-700 dark:text-surface-100">{{ t('footer.linkedin') }}</a>
-                        <a href="https://github.com/anmawex" target="_blank" class="leading-normal text-xl block cursor-pointer mb-2 text-surface-700 dark:text-surface-100">{{ t('footer.github') }}</a>
+                        <a href="https://anmawex.vercel.app" target="_blank" class="leading-normal text-xl block w-fit mx-auto md:mx-0 cursor-pointer mb-2 text-surface-700 dark:text-surface-100">{{ t('footer.portfolio') }}</a>
+                        <a href="https://www.linkedin.com/in/angelcordero1003/" target="_blank" class="leading-normal text-xl block w-fit mx-auto md:mx-0 cursor-pointer mb-2 text-surface-700 dark:text-surface-100">{{ t('footer.linkedin') }}</a>
+                        <a href="https://github.com/anmawex" target="_blank" class="leading-normal text-xl block w-fit mx-auto md:mx-0 cursor-pointer mb-2 text-surface-700 dark:text-surface-100">{{ t('footer.github') }}</a>
                     </div>
 
                     <div class="col-span-12 md:col-span-4">
                         <h4 class="font-medium text-2xl leading-normal mb-4 text-surface-900 dark:text-surface-0">{{ t('footer.resources') }}</h4>
-                        <span v-tooltip="t('footer.inProgress')" class="leading-normal text-xl block mb-2 text-surface-500 dark:text-surface-400 cursor-not-allowed opacity-60">
+                        <span v-tooltip="t('footer.inProgress')" class="leading-normal text-xl block w-fit mx-auto md:mx-0 mb-2 text-surface-500 dark:text-surface-400 cursor-not-allowed opacity-60">
                             {{ t('menu.documentation') }}
                         </span>
                     </div>
 
                     <div class="col-span-12 md:col-span-4">
                         <h4 class="font-medium text-2xl leading-normal mb-4 text-surface-900 dark:text-surface-0">{{ t('footer.legal') }}</h4>
-                        <router-link to="/privacy" class="leading-normal text-xl block cursor-pointer mb-2 text-surface-700 dark:text-surface-100">{{ t('footer.privacy') }}</router-link>
-                        <router-link to="/terms" class="leading-normal text-xl block cursor-pointer text-surface-700 dark:text-surface-100">{{ t('footer.terms') }}</router-link>
+                        <router-link to="/privacy" class="leading-normal text-xl block w-fit mx-auto md:mx-0 cursor-pointer mb-2 text-surface-700 dark:text-surface-100">{{ t('footer.privacy') }}</router-link>
+                        <router-link to="/terms" class="leading-normal text-xl block w-fit mx-auto md:mx-0 cursor-pointer text-surface-700 dark:text-surface-100">{{ t('footer.terms') }}</router-link>
                     </div>
                 </div>
             </div>
