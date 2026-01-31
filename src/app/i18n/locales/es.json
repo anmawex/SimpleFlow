@@ -194,7 +194,8 @@
         "github": "GitHub",
         "privacy": "Política de Privacidad",
         "terms": "Términos de Servicio",
-        "contact": "Contacto"
+        "contact": "Contacto",
+        "inProgress": "Documentación en proceso..."
     },
     "privacy": {
         "title": "Política de Privacidad",

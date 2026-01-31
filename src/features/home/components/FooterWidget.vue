@@ -31,14 +31,16 @@ const { t } = useI18n();
                     <div class="col-span-12 md:col-span-4">
                         <h4 class="font-medium text-2xl leading-normal mb-4 text-surface-900 dark:text-surface-0">{{ t('footer.developer') }}</h4>
                         <!-- Deja campo abierto para tus contactos -->
-                        <a href="#" target="_blank" class="leading-normal text-xl block cursor-pointer mb-2 text-surface-700 dark:text-surface-100">{{ t('footer.portfolio') }}</a>
+                        <a href="https://anmawex.vercel.app" target="_blank" class="leading-normal text-xl block cursor-pointer mb-2 text-surface-700 dark:text-surface-100">{{ t('footer.portfolio') }}</a>
                         <a href="https://www.linkedin.com/in/angelcordero1003/" target="_blank" class="leading-normal text-xl block cursor-pointer mb-2 text-surface-700 dark:text-surface-100">{{ t('footer.linkedin') }}</a>
                         <a href="https://github.com/anmawex" target="_blank" class="leading-normal text-xl block cursor-pointer mb-2 text-surface-700 dark:text-surface-100">{{ t('footer.github') }}</a>
                     </div>
 
                     <div class="col-span-12 md:col-span-4">
                         <h4 class="font-medium text-2xl leading-normal mb-4 text-surface-900 dark:text-surface-0">{{ t('footer.resources') }}</h4>
-                        <a class="leading-normal text-xl block cursor-pointer mb-2 text-surface-700 dark:text-surface-100">{{ t('menu.documentation') }}</a>
+                        <span v-tooltip="t('footer.inProgress')" class="leading-normal text-xl block mb-2 text-surface-500 dark:text-surface-400 cursor-not-allowed opacity-60">
+                            {{ t('menu.documentation') }}
+                        </span>
                     </div>
 
                     <div class="col-span-12 md:col-span-4">
