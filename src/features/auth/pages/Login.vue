@@ -220,6 +220,10 @@ const handleLogin = async () => {
                             @click="handleLogin" 
                             :disabled="authStore.loading || !email || !password"
                         ></Button>
+
+                        <div class="mt-6 text-center">
+                            <Button label="Volver al inicio" icon="pi pi-arrow-left" variant="text" as="router-link" to="/" class="text-surface-600 dark:text-surface-400"></Button>
+                        </div>
                     </div>
                 </div>
             </div>
