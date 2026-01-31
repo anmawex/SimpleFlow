@@ -1,8 +1,10 @@
 <script setup>
+import { useLayout } from '@/app/layout/composables/layout';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t, locale } = useI18n();
+const { toggleDarkMode, isDarkTheme } = useLayout();
 
 const showAccessModal = ref(false);
 
@@ -88,6 +90,7 @@ function closeAndScroll() {
             </li>
         </ul>
         <div class="flex border-t lg:border-t-0 border-surface py-4 lg:py-0 mt-4 lg:mt-0 gap-2 items-center">
+            <Button type="button" @click="toggleDarkMode" rounded :icon="isDarkTheme ? 'pi pi-moon' : 'pi pi-sun'" severity="secondary" variant="text" />
             <Select v-model="locale" :options="languageOptions" optionLabel="label" optionValue="value" class="w-32 mr-4" />
             <Button :label="t('menu.login')" text as="router-link" to="/login" rounded></Button>
             <Button :label="t('menu.register')" @click="handleRegister" rounded></Button>
